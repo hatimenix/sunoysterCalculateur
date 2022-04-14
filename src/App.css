@@ -1,17 +1,70 @@
 .header{
 
-background-color:white;
-border: 1px solid grey;
-border-color: gray;
- 
-   
-  border-bottom-left-radius: 3%;
-  border-bottom-right-radius: 3%;
-  
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #fff;
+  border-radius: 0 0 20px 20px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 30px;
+  min-height: 150px;
+  box-shadow: 0 5px 10px #bbb;
+
+
 }
+.form-control{
+
+  width: 300px;
+  height: 35px;
+}
+.form-select{
+  width: 300px;
+  height: 30px;
+
+}
+.row{
+
+  margin-top: 20px;
+}
+ 
 .accordion{
 
   margin-top: 52px;
+}
+.App{
+
+  height: 1000px;
+  width: 800px;
+  margin: 0 auto;
+  background-color: #fff;
+}
+#cor{
+
+  margin-top: 4px;
+
+  
+}
+.col-sm{
+
+
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 40px;
+}
+.containe{
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+@media screen and (min-width: 768px) {
+  .jumbotron {
+      padding-top: 0;
+  }}
+#inf1{
+  margin-right: 10px;
+  height: 40px;
+  margin-top: 15px;
+  margin-left: 10px;
 }
 
 .description{
@@ -29,9 +82,12 @@ border-color: gray;
 
 }
 body{
-  height: 1000px;
-  width: 800px;
-  margin: 0 auto;
+
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #e5e5e5  ;
+
 
 }
 
@@ -52,3 +108,23 @@ head{
   width: 400px;
   height: auto;
  }
+ #map {
+  height: 50%;
+}
+
+.map-container {
+  height: 400px;
+}
+
+.sidebar {
+  background-color: rgba(35, 55, 75, 0.9);
+  color: #fff;
+  padding: 6px 12px;
+  font-family: monospace;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 12px;
+  border-radius: 4px;
+}
