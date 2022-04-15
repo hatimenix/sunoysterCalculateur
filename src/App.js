@@ -8,7 +8,9 @@ import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import country from "which-country/lib/which-country";
+import log from "./download.jpg";
 import axios from "axios";
+ 
 
 let isSelect = false;
 
@@ -47,20 +49,19 @@ function App() {
     if (!isSelect) {
       isSelect = true;
     } else if (isSelect) {
-          isSelect=false
-          setfactTherm(0);
-          setConsTherm(0);
-          return
+      isSelect = false;
+      setfactTherm(0);
+      setConsTherm(0);
+      return;
     }
 
     if (e.target.value === "Mazout") {
-      if (consTherm !== 0){
+      if (consTherm !== 0) {
         setfactTherm((puMazout * consTherm) / ceMazout);
       }
       if (factTherm !== 0) {
         setConsTherm((factTherm * ceMazout) / puMazout);
       }
-      
     }
     if (e.target.value === "Fioul") {
       if (consTherm !== 0) {
@@ -69,17 +70,15 @@ function App() {
       if (factTherm !== 0) {
         setConsTherm((factTherm * ceFioul) / puFioul);
       }
-      
     }
     if (e.target.value === "Propane") {
       if (consTherm !== 0) {
         setfactTherm((consTherm * puPropane) / cePropane);
-        alert("sfdsf")
+        alert("sfdsf");
       }
       if (factTherm !== 0) {
         setConsTherm((factTherm * cePropane) / puPropane);
       }
-      
     }
   };
 
@@ -99,9 +98,8 @@ function App() {
     setfactTherm(e);
 
     if (consType === "Propane") {
-       
       setConsTherm((e * cePropane) / puPropane);
-      console.log(e)
+      console.log(e);
     }
     if (consType === "Mazout") {
       setConsTherm((e * ceMazout) / puMazout);
@@ -179,6 +177,7 @@ function App() {
               data-bs-target="#panelsStayOpen-collapseOne"
               aria-expanded="true"
               aria-controls="panelsStayOpen-collapseOne"
+              id="tx"
             >
               Localisation Geographique
             </button>
@@ -190,37 +189,38 @@ function App() {
           >
             <div className="accordion-body">
               <div ref={mapContainer} className="map-container" />
-            </div>
-          </div>
+              <div className="containe">
+                <div className="row">
+                  <div className="col-sm" id="txt">Recherche de l'emplacement</div>
 
-          <div className="containe">
-            <div className="row">
-              <div className="col-sm">Recherche de l'emplacement</div>
+                  <div className="col-sm">
+                    <div id="geocoder" className="geocoder form"></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header"><div><FontAwesomeIcon icon={faCircleInfo} id="icon"/></div><div>Info</div></div>
+                  <div class="card-body">
+                  <div className="row">
+                  <div className="col-sm" id="tx">Latitude</div>
 
-              <div className="col-sm">
-                <div id="geocoder" className="geocoder form"></div>
-              </div>
-            </div>
+                  <div className="col-sm">
+                    <h6>{lat}</h6>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-sm" id="tx">Longitude</div>
 
-            <div className="row">
-              <div className="col-sm">Country</div>
+                  <div className="col-sm">
+                    <h6> {lng}</h6>
+                  </div>
+                </div>
 
-              <div className="col-sm">
-                <h6></h6>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm">Latitude</div>
 
-              <div className="col-sm">
-                <h6>{lat}</h6>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-sm">Longitude</div>
 
-              <div className="col-sm">
-                <h6> {lng}</h6>
+                  </div>
+                </div>
+
+              
               </div>
             </div>
           </div>
@@ -234,6 +234,8 @@ function App() {
               data-bs-target="#panelsStayOpen-collapseTwo"
               aria-expanded="false"
               aria-controls="panelsStayOpen-collapseTwo"
+              id="tx"
+               
             >
               Facture et Consommation énergétique
             </button>
@@ -246,7 +248,7 @@ function App() {
             <div className="accordion-body">
               <div className="conatine">
                 <div className="row">
-                  <div className="col-sm" id="cor">
+                  <div className="col-sm"   id="cor" >
                     Factures électriques annuelles
                   </div>
                   <div className="col-sm">
@@ -312,7 +314,6 @@ function App() {
                     />
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -326,6 +327,7 @@ function App() {
               data-bs-target="#panelsStayOpen-collapseThree"
               aria-expanded="false"
               aria-controls="panelsStayOpen-collapseThree"
+              id="tx"
             >
               Modèles SUNOYSTERS
             </button>
@@ -335,7 +337,13 @@ function App() {
             className="accordion-collapse collapse"
             aria-labelledby="panelsStayOpen-headingThree"
           >
-            <div className="accordion-body"></div>
+            <div className="accordion-body">
+              <div className="row" id="image">
+                <div className="container">
+                  <img src={log} id="size" alt="Sunoyster 16" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -349,6 +357,7 @@ function App() {
             data-bs-target="#panelsStayOpen-collapseTwo"
             aria-expanded="false"
             aria-controls="panelsStayOpen-collapseTwo"
+            id="tx"
           >
             Facture et Consommation énergétique
           </button>
