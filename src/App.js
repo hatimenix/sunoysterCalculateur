@@ -1,5 +1,6 @@
 import "./App.css";
 import Title from "./components/Title";
+import Footer from "./components/Footer";
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -10,7 +11,6 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import country from "which-country/lib/which-country";
 import log from "./download.jpg";
 import axios from "axios";
- 
 
 let isSelect = false;
 
@@ -191,36 +191,42 @@ function App() {
               <div ref={mapContainer} className="map-container" />
               <div className="containe">
                 <div className="row">
-                  <div className="col-sm" id="txt">Recherche de l'emplacement</div>
+                  <div className="col-sm" id="txt">
+                    Recherche de l'emplacement
+                  </div>
 
                   <div className="col-sm">
                     <div id="geocoder" className="geocoder form"></div>
                   </div>
                 </div>
                 <div class="card">
-                  <div class="card-header"><div><FontAwesomeIcon icon={faCircleInfo} id="icon"/></div><div>Info</div></div>
+                  <div class="card-header">
+                    <div>
+                      <FontAwesomeIcon icon={faCircleInfo} id="icon" />
+                    </div>
+                    <div>Info</div>
+                  </div>
                   <div class="card-body">
-                  <div className="row">
-                  <div className="col-sm" id="tx">Latitude</div>
+                    <div className="row">
+                      <div className="col-sm" id="tx">
+                        Latitude
+                      </div>
 
-                  <div className="col-sm">
-                    <h6>{lat}</h6>
+                      <div className="col-sm">
+                        <h6>{lat}</h6>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-sm" id="tx">
+                        Longitude
+                      </div>
+
+                      <div className="col-sm">
+                        <h6> {lng}</h6>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-sm" id="tx">Longitude</div>
-
-                  <div className="col-sm">
-                    <h6> {lng}</h6>
-                  </div>
-                </div>
-
-
-
-                  </div>
-                </div>
-
-              
               </div>
             </div>
           </div>
@@ -235,7 +241,6 @@ function App() {
               aria-expanded="false"
               aria-controls="panelsStayOpen-collapseTwo"
               id="tx"
-               
             >
               Facture et Consommation énergétique
             </button>
@@ -248,7 +253,7 @@ function App() {
             <div className="accordion-body">
               <div className="conatine">
                 <div className="row">
-                  <div className="col-sm"   id="cor" >
+                  <div className="col-sm" id="cor">
                     Factures électriques annuelles
                   </div>
                   <div className="col-sm">
@@ -346,30 +351,30 @@ function App() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="accordion-item">
-        <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseTwo"
-            aria-expanded="false"
-            aria-controls="panelsStayOpen-collapseTwo"
-            id="tx"
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#panelsStayOpen-collapseTwo"
+              aria-expanded="false"
+              aria-controls="panelsStayOpen-collapseTwo"
+              id="tx"
+            >
+              Géneration énergetique
+            </button>
+          </h2>
+          <div
+            id="panelsStayOpen-collapseTwo"
+            className="accordion-collapse collapse"
+            aria-labelledby="panelsStayOpen-headingTwo"
           >
-            Facture et Consommation énergétique
-          </button>
-        </h2>
-        <div
-          id="panelsStayOpen-collapseTwo"
-          className="accordion-collapse collapse"
-          aria-labelledby="panelsStayOpen-headingTwo"
-        >
-          <div className="accordion-body"></div>
-        </div>
+            <div className="accordion-body"></div>
+          </div>
+        </div> 
       </div>
+ 
     </div>
   );
 }

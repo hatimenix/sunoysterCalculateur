@@ -1,5 +1,5 @@
 import react,{useState} from "react";
-import logo from "../ALBARRAY_Consulting.jpg";
+import logo from "../ll.jpeg";
 import img from "../img.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo,faInfo} from '@fortawesome/free-solid-svg-icons';
@@ -21,12 +21,11 @@ function Title(){
    
         <div className="header">
 
-                    <img src={logo} alt="info"></img>
+                    <img src={logo} id="color" alt="info"></img>
                  <div className="info">
                     <div>
                     <FontAwesomeIcon icon={faCircleInfo} id="inf1" /></div>   
-                 <div className="description">SunoysterCalc est calculateur d'autonomie energetique des systemes PV, pour savoir plus <a className="read-more-link" onClick={()=>{setReadMore(!readMore)}}><h7 id="tx">{linkName}</h7></a>
-      {readMore && extraContent}</div>
+                 <div className="description">SunoysterCalc est calculateur d'autonomie energetique des systemes photovoltaïque </div>
                  </div>
                 
 
