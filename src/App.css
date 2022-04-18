@@ -131,6 +131,10 @@ p{
       width: 500px;
       height: auto;
   }
+  #color{
+
+    margin-left: 50px;
+  }
   .header{
 
     width: auto;
@@ -151,9 +155,10 @@ p{
 
     width:250px ;
     height: auto;
+    margin-left: 0px;;
   }
   .info{
-    margin-left: -35px;
+    margin-left: auto;
   }
 
 
