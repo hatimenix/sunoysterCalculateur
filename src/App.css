@@ -8,7 +8,7 @@
   margin-right: 0;
   margin-bottom: 30px;
   min-height: 200px;
-  box-shadow: 0 5px 10px #8eecf5;
+ 
 
 
 }
@@ -66,7 +66,7 @@ p{
 
   margin-top: 52px;
   border: none;
-  box-shadow: 0 5px 10px #8eecf5;
+
 
 }
 .accordion-item{
@@ -133,7 +133,7 @@ p{
   }
   #color{
 
-    margin-left: 50px;
+    margin-left: 20px;
   }
   .header{
 

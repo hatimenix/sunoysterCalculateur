@@ -25,7 +25,7 @@ function Title(){
                  <div className="info">
                     <div>
                     <FontAwesomeIcon icon={faCircleInfo} id="inf1" /></div>   
-                 <div className="description">SunoysterCalc est calculateur d'autonomie energetique des systemes photovoltaïque </div>
+                 <div className="description">SunoysterCalc est un calculateur d'autonomie energetique des systemes photovoltaïque </div>
                  </div>
                 
 
