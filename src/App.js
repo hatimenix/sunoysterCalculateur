@@ -3,44 +3,51 @@ import Title from "./components/Title";
 import Footer from "./components/Footer";
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import MyMapComponent from "./MyMapComponent.js";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import country from "which-country/lib/which-country";
 import log from "./download.jpg";
 import axios from "axios";
+import { Wrapper, Status,Spinner,ErrorComponent } from "@googlemaps/react-wrapper";
 
 let isSelect = false;
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiYmF6dGEiLCJhIjoiY2wxeWxtZzJjMGR0YjNtcW9hemp6cm5hNyJ9.W6ct7mRcARTDPCGx0YFcvg";
+ 
+const apiKey = "AIzaSyCzVs5-pCwCsoacR3YIPTMBCCF7gH183P4";
+
 let puMazout = 13;
 let puFioul = 4;
 let puPropane = 12;
 let ceFioul = 10;
 let cePropane = 13;
 let ceMazout = 10;
+let map;
 
 function App() {
+   
+  const searchInput = useRef(null);
   const mapContainer = useRef(null);
-  const map = useRef(null);
 
   const [inputFac, setInputFac] = useState("");
 
-  const [inputCons, setInputCons] = useState("");
-
-  const [lng, setLng] = useState(-9.598107);
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const [lat, setLat] = useState(30.427755);
-  const [zoom, setZoom] = useState(9);
-  const [country, setCountry] = useState("Agadir");
   const [addrtype, setAddrtype] = useState(["Mazout", "Fioul", "Propane"]);
   const [consType, setConstType] = useState("");
   const [factTherm, setfactTherm] = useState("");
   const [consTherm, setConsTherm] = useState("");
+  const ref = React.useRef(null);
+  const [map, setMap] = React.useState();
+  const render =(Status)=>{
+    return <h1>{Status }</h1>
+ }
+
+React.useEffect(() => {
+   if (ref.current && !map) {
+     setMap(new window.google.maps.Map(ref.current,{}));
+    }
+ }, [ref, map]);
 
   const Add = addrtype.map((Add) => Add);
   const handleAddrTypeChange = (e) => {
@@ -81,6 +88,7 @@ function App() {
       }
     }
   };
+   
 
   const maybeConsTherm = (e) => {
     setConsTherm(e);
@@ -109,57 +117,12 @@ function App() {
     }
   };
 
+  var Map = function () {
+   return <div ref={ref} />;
+  };
   const maybeInputFac = (e) => {
     setInputFac(e * 0.89);
   };
-  useEffect(() => {
-    if (map.current) return; // initialize map only once
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: 8,
-    });
-
-    var geocoder = new MapboxGeocoder({
-      accessToken: mapboxgl.accessToken,
-      mapboxgl: mapboxgl,
-      zoom: zoom,
-    });
-
-    var bazta = document.getElementById("geocoder");
-    if (bazta) {
-      bazta.appendChild(geocoder.onAdd(map.current));
-    }
-
-    var ap =
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/-74.00258165196071,40.754390207222.json?types=place%2Cpostcode%2Caddress%2Ccountry&limit=1&access_token=pk.eyJ1IjoiYmF6dGEiLCJhIjoiY2wxeWxtZzJjMGR0YjNtcW9hemp6cm5hNyJ9.W6ct7mRcARTDPCGx0YFcvg";
-  });
-
-  useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on("move", () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setLat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
-    });
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data: response } = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${lat},${lng}.json?types=country%2Cplace&limit=1&access_token=pk.eyJ1IjoiYmF6dGEiLCJhIjoiY2wxeWxtZzJjMGR0YjNtcW9hemp6cm5hNyJ9.W6ct7mRcARTDPCGx0YFcvg`
-        );
-
-        setData(response);
-      } catch (error) {
-        console.error(error.message);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="App">
@@ -188,7 +151,10 @@ function App() {
             aria-labelledby="panelsStayOpen-headingOne"
           >
             <div className="accordion-body">
-              <div ref={mapContainer} className="map-container" />
+             <Wrapper apiKey={apiKey} render={render}>
+               <MyMapComponent/>
+             </Wrapper>
+
               <div className="containe">
                 <div className="row">
                   <div className="col-sm" id="txt">
@@ -196,33 +162,51 @@ function App() {
                   </div>
 
                   <div className="col-sm">
-                    <div id="geocoder" className="geocoder form"></div>
+                    <div className="search">
+                      <span></span>
+                      <input
+                        ref={searchInput}
+                        type="text"
+                        placeholder="Search location ..... "
+                      />
+                      <button></button>
+                    </div>
                   </div>
                 </div>
-                <div class="card">
-                  <div class="card-header">
+                <div className="card">
+                  <div className="card-header">
                     <div>
                       <FontAwesomeIcon icon={faCircleInfo} id="icon" />
                     </div>
                     <div>Info</div>
                   </div>
-                  <div class="card-body">
+                  <div className="card-body">
                     <div className="row">
                       <div className="col-sm" id="tx">
-                        Latitude
+                        Ville
                       </div>
 
                       <div className="col-sm">
-                        <h6>{lat}</h6>
+                        <h6></h6>
                       </div>
                     </div>
                     <div className="row">
                       <div className="col-sm" id="tx">
-                        Longitude
+                        State
                       </div>
 
                       <div className="col-sm">
-                        <h6> {lng}</h6>
+                        <h6> </h6>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-sm" id="tx">
+                        Pays
+                      </div>
+
+                      <div className="col-sm">
+                        <h6></h6>
                       </div>
                     </div>
                   </div>
@@ -372,9 +356,8 @@ function App() {
           >
             <div className="accordion-body"></div>
           </div>
-        </div> 
+        </div>
       </div>
- 
     </div>
   );
 }

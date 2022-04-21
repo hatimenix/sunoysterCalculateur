@@ -6,10 +6,69 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+ 
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.imgHead{
+
+  display: flex;
+  justify-content: center;
+}
+.content{
+  display: flex;
+ 
+  flex-direction: column  ;
+}
+#text{
+
+  margin-top: 40px;
+  margin-left: 150px;
+}
+#imgsize1{
+
+  height: 170px;
+  margin-top: 10px;
+}
+ 
+.container{
+
+  padding-bottom: 30px;
+}
+
+th, td{
+  border: 1px solid black;
+  padding: 10px;
+}
+.haut{
+  display: flex;
+   
+  justify-content: center ;
+  padding-top: 60px;
+
+}
+.butt{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+#pad{
+  margin-top: 30px;
+}
+#array{
+  width: 700px;
+
+
+
+
+}
+#imgsize{
+
+  height: 140px;
+  width: 376px;
+  margin-left: 50px;
 }
 .read-more-link{
   color: blueviolet;
@@ -19,6 +78,9 @@ code {
   padding-top: 2px;
    
 }
-.extra-content{
- 
+.arrayw{
+
+  display: flex ;
+  justify-content: center;
 }
+ 
