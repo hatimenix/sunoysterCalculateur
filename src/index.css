@@ -17,11 +17,13 @@ code {
   display: flex;
   justify-content: center;
 }
-.content{
+#info{
   display: flex;
- 
-  flex-direction: column  ;
 }
+#icon{
+  margin-right: 8px;
+}
+ 
 #text{
 
   margin-top: 40px;
@@ -77,10 +79,5 @@ th, td{
   cursor: pointer;
   padding-top: 2px;
    
-}
-.arrayw{
-
-  display: flex ;
-  justify-content: center;
 }
  

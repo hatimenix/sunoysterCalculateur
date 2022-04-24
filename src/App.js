@@ -4,19 +4,24 @@ import Footer from "./components/Footer";
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import MyMapComponent from "./MyMapComponent.js";
-
+import cs from "./sunoyster_8.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
 
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import log from "./download.jpg";
 import axios from "axios";
-import { Wrapper, Status,Spinner,ErrorComponent } from "@googlemaps/react-wrapper";
+import {
+  Wrapper,
+  Status,
+  Spinner,
+  ErrorComponent,
+} from "@googlemaps/react-wrapper";
 
 let isSelect = false;
+let geocoder;
 
- 
-const apiKey = "AIzaSyCzVs5-pCwCsoacR3YIPTMBCCF7gH183P4";
+const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 
 let puMazout = 13;
 let puFioul = 4;
@@ -24,30 +29,49 @@ let puPropane = 12;
 let ceFioul = 10;
 let cePropane = 13;
 let ceMazout = 10;
-let map;
+let submitButton;
+
+function loadAsyncScript(src) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    Object.assign(script, {
+      type: "text/javascript",
+      async: true,
+      src,
+    });
+    script.addEventListener("load", () => resolve(script));
+    document.head.appendChild(script);
+  });
+}
 
 function App() {
-   
-  const searchInput = useRef(null);
-  const mapContainer = useRef(null);
-
+  const [state, setState] = useState({
+    persons: [],
+  });
   const [inputFac, setInputFac] = useState("");
 
   const [addrtype, setAddrtype] = useState(["Mazout", "Fioul", "Propane"]);
   const [consType, setConstType] = useState("");
   const [factTherm, setfactTherm] = useState("");
   const [consTherm, setConsTherm] = useState("");
-  const ref = React.useRef(null);
-  const [map, setMap] = React.useState();
-  const render =(Status)=>{
-    return <h1>{Status }</h1>
- }
+  const [slid,setSlid]=useState(122)
+  var slider = useRef()
+  var output = useRef()
+  console.log(output)
+  useEffect(() => {
+    output.innerHTML = slider.current.value; // Display the default slider value
 
-React.useEffect(() => {
-   if (ref.current && !map) {
-     setMap(new window.google.maps.Map(ref.current,{}));
-    }
- }, [ref, map]);
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function () {
+      output.innerHTML = slider.current.value;
+    };
+  }, []);
+
+  const ref = React.useRef(null);
+
+  const render = (Status) => {
+    return <h1>{Status}</h1>;
+  };
 
   const Add = addrtype.map((Add) => Add);
   const handleAddrTypeChange = (e) => {
@@ -88,7 +112,6 @@ React.useEffect(() => {
       }
     }
   };
-   
 
   const maybeConsTherm = (e) => {
     setConsTherm(e);
@@ -116,10 +139,8 @@ React.useEffect(() => {
       setConsTherm((e * ceFioul) / puFioul);
     }
   };
+  const geocodeJson = "https://maps.googleapis.com/maps/api/js";
 
-  var Map = function () {
-   return <div ref={ref} />;
-  };
   const maybeInputFac = (e) => {
     setInputFac(e * 0.89);
   };
@@ -151,67 +172,9 @@ React.useEffect(() => {
             aria-labelledby="panelsStayOpen-headingOne"
           >
             <div className="accordion-body">
-             <Wrapper apiKey={apiKey} render={render}>
-               <MyMapComponent/>
-             </Wrapper>
-
-              <div className="containe">
-                <div className="row">
-                  <div className="col-sm" id="txt">
-                    Recherche de l'emplacement
-                  </div>
-
-                  <div className="col-sm">
-                    <div className="search">
-                      <span></span>
-                      <input
-                        ref={searchInput}
-                        type="text"
-                        placeholder="Search location ..... "
-                      />
-                      <button></button>
-                    </div>
-                  </div>
-                </div>
-                <div className="card">
-                  <div className="card-header">
-                    <div>
-                      <FontAwesomeIcon icon={faCircleInfo} id="icon" />
-                    </div>
-                    <div>Info</div>
-                  </div>
-                  <div className="card-body">
-                    <div className="row">
-                      <div className="col-sm" id="tx">
-                        Ville
-                      </div>
-
-                      <div className="col-sm">
-                        <h6></h6>
-                      </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-sm" id="tx">
-                        State
-                      </div>
-
-                      <div className="col-sm">
-                        <h6> </h6>
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-sm" id="tx">
-                        Pays
-                      </div>
-
-                      <div className="col-sm">
-                        <h6></h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Wrapper apiKey={apiKey} render={render}>
+                <MyMapComponent />
+              </Wrapper>
             </div>
           </div>
         </div>
@@ -327,10 +290,79 @@ React.useEffect(() => {
             aria-labelledby="panelsStayOpen-headingThree"
           >
             <div className="accordion-body">
-              <div className="row" id="image">
-                <div className="container">
-                  <img src={log} id="size" alt="Sunoyster 16" />
+              <div classsName="form-group form-group-image-checkbox is-invalid">
+               
+                <div classsName="row " id="cont" >
+
+                  <div className="col-md-3" id="modele"><strong>Modèle</strong></div>
+                <div classsName="col-md-3">
+        <div classsName="custom-control custom-radio image-checkbox" >
+            <input type="radio" classsName="custom-control-input" id="ck2a" name="ck2" />
+            <label classsName="custom-control-label" htmlFor="ck2a" >
+                <img src={cs} alt="#" class="img-fluid" id="sizeP" /> 
+            </label>
+        </div>
+    </div>
+
+                  <div className="col-md-3">
+                    <div classsName="custom-control custom-radio image-checkbox">
+                      <input
+                        type="radio"
+                        classsName="custom-control-input"
+                        id="ck2d"
+                        name="ck2"
+                      />
+                      <label classsName="custom-control-label" htmlFor="ck2d">
+                        <img src={log} alt="#" classsName="img-fluid" id="sizeP" />
+                      </label>
+                    </div>
+                  </div>
                 </div>
+
+                <div className="row content">
+                  <div className="col-sm" id="t">
+                    {" "}
+                    <p><strong>Type du modèle</strong></p>{" "}
+                  </div>
+
+                  <div className="col-sm">
+                    {" "}
+                    <div className="col-sm" id="cd">
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                        id="bn"
+                      >
+                        <option selected value=""></option>
+                        <option value="Mazout">2 Tubes hybrides</option>
+                        <option value="Fioul">2 Tubes thermiques</option>
+                        <option value="Propane">1 Tube hybride</option>
+                        <option value="Fioul">1 Tubes thermiques</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="row content">
+                  <div className="col-sm" id="ty">
+                    {" "}
+                    <p><strong>Température du fluide</strong></p>{" "}
+                  </div>
+
+                  <div className="col-sm slidecontainer">
+                    <input
+                      type="range"
+                      min="90"
+                      max="175"
+                     
+                      ref={slider}
+                      class="slider"
+                      id="myRange"
+                      onChange={(e)=>setSlid(e.target.value)}
+                    />
+                    <p id="demo" ref={output}></p>
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>

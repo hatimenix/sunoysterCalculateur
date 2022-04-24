@@ -11,6 +11,11 @@ import sunoyster_8 from "./sunoyster_8.png";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
+
+  const geocodeString=(searchInput)=>{
+
+    
+  }
   let navigate = useNavigate();
   const routeChange = () => {
     let path = `expenses`;
