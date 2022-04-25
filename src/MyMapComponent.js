@@ -94,6 +94,10 @@ function MyMapComponent() {
           }
         });
       }
+      window.google.maps.event.addListener(map, 'zoom_changed', function() {
+        var zoom = map.getZoom();
+        setZoom(zoom)
+    });
 
       map.addListener("click", (e) => {
         placeMarkerAndPanTo(e.latLng, map);
@@ -102,6 +106,7 @@ function MyMapComponent() {
         setLng(e.latLng.lng());
         setCenter({ lat: lat, lng: lng });
         codeLatLng(geocoder, lat, lng);
+
       });
       function placeMarkerAndPanTo(latLng, map) {
         new window.google.maps.Marker({
