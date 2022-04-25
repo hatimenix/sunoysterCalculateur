@@ -1,8 +1,11 @@
 import React from "react";
+ 
+ 
+ 
+import Tilte from "./components/Title"
 import sos from "./SOS.jpg";
 import ss from "./ALBARRAY_Consulting.jpg";
-import bb from "./bazt.jpeg";
-import Tilte from "./components/Title"
+import bb from "./dynamic_so16.gif";
  
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopyright } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +26,18 @@ function Home() {
   };
   return (
     <div className="container">
-        <Tilte/>
+    <div>
+      <div className="hau">
+      <img src={ss} alt="sunoyster" id="imgsize" />
+        <img src={sos} alt="sunoyster" />
+   
+      </div>
+
+      <div className="imgHead">
+        <img src={bb} alt="bazta" id="imgsize1" />
+      </div>
+    </div>
+      
       <div className="content">
         <p id="text" class="text-justify">
           <strong>

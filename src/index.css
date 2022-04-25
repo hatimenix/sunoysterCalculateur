@@ -51,6 +51,11 @@ th, td{
   padding-top: 20px;
 
 }
+.hau{
+
+  margin-left: 190px;
+  padding-top: 20px;
+}
 .butt{
   display: flex;
   justify-content: center;
@@ -66,6 +71,7 @@ th, td{
 
 
 }
+ 
 #imgsize{
 
   height: 100px;
