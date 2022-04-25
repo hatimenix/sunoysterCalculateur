@@ -50,6 +50,9 @@ function App() {
   });
   const [inputFac, setInputFac] = useState("");
 
+  const [inputCons,setInputCons]=useState("");
+  
+
   const [addrtype, setAddrtype] = useState(["Mazout", "Fioul", "Propane"]);
   const [consType, setConstType] = useState("");
   const [factTherm, setfactTherm] = useState("");
@@ -57,7 +60,15 @@ function App() {
   const [slid,setSlid]=useState(122)
   var slider = useRef()
   var output = useRef()
-  console.log(output)
+const [inits,setInits]=useState('')
+useEffect(()=>{
+
+  fetch("http://localhost:9000/api")
+  .then(res=>res.text())
+  .then(res=>setInits(res))
+})
+
+ 
   useEffect(() => {
     output.innerHTML = slider.current.value; // Display the default slider value
 
@@ -88,27 +99,27 @@ function App() {
 
     if (e.target.value === "Mazout") {
       if (consTherm !== 0) {
-        setfactTherm((puMazout * consTherm) / ceMazout);
+        setfactTherm(((puMazout * consTherm) / ceMazout));
       }
       if (factTherm !== 0) {
-        setConsTherm((factTherm * ceMazout) / puMazout);
+        setConsTherm(((factTherm * ceMazout) / puMazout));
       }
     }
     if (e.target.value === "Fioul") {
       if (consTherm !== 0) {
-        setfactTherm((consTherm * puFioul) / ceFioul);
+        setfactTherm(((consTherm * puFioul) / ceFioul));
       }
       if (factTherm !== 0) {
-        setConsTherm((factTherm * ceFioul) / puFioul);
+        setConsTherm(((factTherm * ceFioul) / puFioul));
       }
     }
     if (e.target.value === "Propane") {
       if (consTherm !== 0) {
-        setfactTherm((consTherm * puPropane) / cePropane);
+        setfactTherm(((consTherm * puPropane) / cePropane));
         alert("sfdsf");
       }
       if (factTherm !== 0) {
-        setConsTherm((factTherm * cePropane) / puPropane);
+        setConsTherm(((factTherm * cePropane) / puPropane));
       }
     }
   };
@@ -116,41 +127,42 @@ function App() {
   const maybeConsTherm = (e) => {
     setConsTherm(e);
     if (consType === "Propane") {
-      setfactTherm((e * puPropane) / cePropane);
+      setfactTherm(((e * puPropane) / cePropane));
     }
     if (consType === "Mazout") {
-      setfactTherm((e * puMazout) / ceMazout);
+      setfactTherm(((e * puMazout) / ceMazout));
     }
     if (consType === "Fioul") {
-      setfactTherm((e * puFioul) / ceFioul);
+      setfactTherm(((e * puFioul) / ceFioul));
     }
   };
   const maybeFacTherm = (e) => {
     setfactTherm(e);
 
     if (consType === "Propane") {
-      setConsTherm((e * cePropane) / puPropane);
+      setConsTherm(((e * cePropane) / puPropane));
       console.log(e);
     }
     if (consType === "Mazout") {
-      setConsTherm((e * ceMazout) / puMazout);
+      setConsTherm(((e * ceMazout) / puMazout));
     }
     if (consType === "Fioul") {
-      setConsTherm((e * ceFioul) / puFioul);
+      setConsTherm(((e * ceFioul) / puFioul));
     }
   };
   const geocodeJson = "https://maps.googleapis.com/maps/api/js";
 
   const maybeInputFac = (e) => {
-    setInputFac(e * 0.89);
+    setInputFac((e * 0.89));
   };
+  
 
   return (
     <div className="App">
       <div className="head">
         <Title />
       </div>
-
+    <h1>{inits}</h1>
       <div className="accordion" id="accordionPanelsStayOpenExample">
         <div className="accordion-item">
           <h2 className="accordion-header" id="panelsStayOpen-headingOne">
@@ -203,6 +215,7 @@ function App() {
                   <div className="col-sm" id="cor">
                     Factures électriques annuelles
                   </div>
+                  
                   <div className="col-sm">
                     <input
                       type="text"
@@ -210,6 +223,7 @@ function App() {
                       className="form-control"
                       onChange={(e) => setInputFac(e.target.value)}
                     />
+                  
                   </div>
                 </div>
                 <div className="row">
@@ -219,8 +233,9 @@ function App() {
                   <div className="col-sm">
                     <input
                       className="form-control"
+                      value={(inputFac / 0.89)}
                       onChange={(e) => maybeInputFac(e.target.value)}
-                      value={inputFac / 0.89}
+                    
                     />
                   </div>
                 </div>

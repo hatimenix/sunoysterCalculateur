@@ -1,14 +1,15 @@
 import sos from "../SOS.jpg";
 import ss from "../ALBARRAY_Consulting.jpg";
-import bb from "../bazt.jpeg";
+import bb from "../dynamic_so16.gif";
 
 //header de l'application
 function Title() {
   return (
     <div>
       <div className="haut">
+      <img src={ss} alt="sunoyster" id="imgsize" />
         <img src={sos} alt="sunoyster" />
-        <img src={ss} alt="sunoyster" id="imgsize" />
+   
       </div>
 
       <div className="imgHead">

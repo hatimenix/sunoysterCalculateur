@@ -153,7 +153,7 @@ function MyMapComponent() {
               </div>
 
               <div className="col-sm">
-                <h6>{lat}</h6>
+                <h6>{lat.toPrecision(4)}</h6>
               </div>
             </div>
 
@@ -163,7 +163,7 @@ function MyMapComponent() {
               </div>
 
               <div className="col-sm">
-                <h6> {lng}</h6>
+                <h6> {lng.toPrecision(3)}</h6>
               </div>
             </div>
 
