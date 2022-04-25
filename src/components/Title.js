@@ -8,7 +8,7 @@ function Title() {
     <div>
       <div className="haut">
       <img src={ss} alt="sunoyster" id="imgsize" />
-        <img src={sos} alt="sunoyster" />
+        <img src={sos} alt="sunoyster" id="er" />
    
       </div>
 

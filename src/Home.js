@@ -29,7 +29,7 @@ function Home() {
     <div>
       <div className="hau">
       <img src={ss} alt="sunoyster" id="imgsize" />
-        <img src={sos} alt="sunoyster" />
+        <img src={sos} alt="sunoyster" id="er" />
    
       </div>
 
