@@ -162,7 +162,7 @@ useEffect(()=>{
       <div className="head">
         <Title />
       </div>
-    <h1>{inits}</h1>
+  
       <div className="accordion" id="accordionPanelsStayOpenExample">
         <div className="accordion-item">
           <h2 className="accordion-header" id="panelsStayOpen-headingOne">
@@ -184,7 +184,7 @@ useEffect(()=>{
             aria-labelledby="panelsStayOpen-headingOne"
           >
             <div className="accordion-body">
-              <Wrapper apiKey={apiKey} render={render}>
+              <Wrapper apiKey={apiKey} region="ma" render={render}>
                 <MyMapComponent />
               </Wrapper>
             </div>

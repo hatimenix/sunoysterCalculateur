@@ -35,6 +35,7 @@ function MyMapComponent() {
   function geo(){
     
     var address=refe.current.value
+    refe.current.value=null;
     
     geocodeString.geocode({ 'address' : address},function(results,status){
 
