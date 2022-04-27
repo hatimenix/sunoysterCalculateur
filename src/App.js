@@ -61,12 +61,7 @@ function App() {
   var slider = useRef()
   var output = useRef()
 const [inits,setInits]=useState('')
-useEffect(()=>{
 
-  fetch("http://localhost:9000/api")
-  .then(res=>res.text())
-  .then(res=>setInits(res))
-})
 
  
   useEffect(() => {
