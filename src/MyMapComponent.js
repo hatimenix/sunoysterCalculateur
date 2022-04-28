@@ -50,7 +50,7 @@ function MyMapComponent() {
         const res=async ()=>{
           
        const ress  = await axios.get(
-          `http://localhost:8888/.netlify/functions/serverApi?lat=${lat}&lon=${lng}`
+          `/.netlify/functions/serverApi?lat=${lat}&lon=${lng}`
         );
        console.log(ress)
        if(ress){
