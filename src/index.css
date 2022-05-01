@@ -12,6 +12,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+#myChart{
+
+  height: 200px;
+  width: 200px;
+}
 .imgHead{
 
   display: flex;
@@ -22,6 +27,12 @@ code {
 }
 #icon{
   margin-right: 8px;
+}
+.ctd{
+width: 700px;
+height: 500px;
+margin-left: 130px;
+margin-top: 90px;
 }
  
 #text{
