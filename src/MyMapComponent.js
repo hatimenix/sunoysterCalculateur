@@ -1,6 +1,7 @@
-import { React, useEffect, useRef, useState } from "react";
+import { React, useContext, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
+import context from "./context";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -25,9 +26,11 @@ ChartJS.register(
   Legend,
   Tooltip
 );
-
-let myChart=null;
+let ht = 0,
+  fs = 0;
+let myChart = null;
 let ghiMonth, tempMonth;
+let arrayGhi=[128,149,191,218,232,232,226,214,173,153,113,116],arrayDni=[222,212,229,246,225,226,192,202,170,183,155,197]
 
 let map;
 let raddatabase = "PVGIS-SARAH2";
@@ -40,30 +43,51 @@ let resp;
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 const gecoderApi = "https://maps.googleapis.com/maps/api/geocode/json";
 
-function MyMapComponent() {
-
-  const [ghiJan,setGhiJanv]=useState()
-  const [ghiFev,setGhiFev]=useState()
-  const [ghiMar,setGhiMar]=useState()
-  const [ghiAvr,setGhiAvr]=useState()
-  const [ghiMai,setGhiMai]=useState()
-  const [ghiJuin,setGhiJuin]=useState()
-  const [ghiJuil,setGhiJuil]=useState()
-  const [ghiAout,setGhiAout]=useState()
-  const [ghiSep,setGhiSep]=useState()
-  const [ghiOct,setGhiOct]=useState()
-  const [ghiNov,setGhiNov]=useState()
-  const [ghiDec,setGhiDec]=useState()
+function MyMapComponent(props) {
+  const [ghiJan, setGhiJanv] = useState();
+  const [ghiFev, setGhiFev] = useState();
+  const [ghiMar, setGhiMar] = useState();
+  const [ghiAvr, setGhiAvr] = useState();
+  const [ghiMai, setGhiMai] = useState();
+  const [ghiJuin, setGhiJuin] = useState();
+  const [ghiJuil, setGhiJuil] = useState();
+  const [ghiAout, setGhiAout] = useState();
+  const [ghiSep, setGhiSep] = useState();
+  const [ghiOct, setGhiOct] = useState();
+  const [ghiNov, setGhiNov] = useState();
+  const [ghiDec, setGhiDec] = useState();
   const [zoom, setZoom] = useState(8);
   const [lat, setLat] = useState(30.427755);
   const [inp, setInp] = useState("");
-  const [tb, setTb] = useState(18);
-  const [ghi, setghi] = useState(259);
+  const [tb, setTb] = useState(2400);
+  const [ghi, setghi] = useState(2127);
   const [ghimonths, setGhimonths] = useState([
-    411, 435, 490, 600, 556, 537, 497, 545, 491, 446, 418, 323,
+    411,
+    435,
+    490,
+    600,
+    556,
+    537,
+    497,
+    545,
+    491,
+    446,
+    418,
+    323,
   ]);
   const [tempmonths, setTempmonths] = useState([
-    14, 14, 16, 17, 17, 24, 24, 23, 22, 21, 18, 15,
+    14,
+    14,
+    16,
+    17,
+    17,
+    24,
+    24,
+    23,
+    22,
+    21,
+    18,
+    15,
   ]);
 
   const [address, setAddress] = useState("Agadir Morocco");
@@ -75,6 +99,28 @@ function MyMapComponent() {
   var ref = useRef();
 
   var searchInput = document.getElementById("bb");
+   
+
+    const contextValue= useContext(context)
+
+    useEffect(()=>{
+      contextValue.setGhi(ghi)
+      contextValue.setDni(tb)
+      contextValue.setTghi(arrayGhi)
+      contextValue.setTdni(arrayDni)
+
+ 
+
+    },[ghi,tb])
+  
+ 
+ 
+   
+
+
+
+  
+ 
 
   useEffect(() => {
     const labels = [
@@ -92,7 +138,7 @@ function MyMapComponent() {
       "decembre",
     ];
 
-    if(myChart!=null){
+    if (myChart != null) {
       myChart.destroy();
     }
     myChart = new ChartJS(document.getElementById("myChart"), {
@@ -102,11 +148,11 @@ function MyMapComponent() {
         datasets: [
           {
             type: "bar",
-            label: "GHI en w/m²",
+            label: "GHI en kw/m²",
 
-            data:ghiMonth,
+            data: ghiMonth,
 
-            backgroundColor: "#005555",
+            backgroundColor: "#00BFFF",
 
             borderColor: "#047baa",
 
@@ -115,13 +161,13 @@ function MyMapComponent() {
           },
           {
             type: "line",
-            label: "Tempeature en C°",
+            label: "DNI en kw/m²",
 
             data: tempMonth,
 
-            backgroundColor: "#aa3e04",
+            backgroundColor: "#00FF00",
 
-            borderColor: "#aa3e04",
+            borderColor: "#00FF00",
 
             borderWidth: 1,
             yAxisID: "percentage",
@@ -143,7 +189,7 @@ function MyMapComponent() {
         },
       },
     });
-  }, [tempMonth,ghiMonth]);
+  }, [tempMonth, ghiMonth]);
 
   let res = async (a, b) => {
     let ress = await axios.get(
@@ -151,129 +197,43 @@ function MyMapComponent() {
     );
 
     if (ress) {
-      const tab = ress.data.outputs.tmy_hourly;
+      const tab = ress.data.outputs.monthly;
 
-      let sum = 0,
-        set,
-        p = 0,
-        t = 0;
-      let compteur = 0;
-      let array = new Array();
+       arrayGhi= new Array();
+      let i=0;
+     arrayDni=new Array()
+      let somGhi=0,somDni=0
 
-      for (p = 0; p < tab.length; p++) {
-        let tt = parseFloat(tab[p]["G(h)"]);
+      for(i=0;i<12;i++){
 
-        sum += tt;
-        compteur++;
+        arrayDni.push(tab[i]["Hb(n)_m"])
+        arrayGhi.push(tab[i]["H(h)_m"])
+        somGhi+=parseInt(tab[i]["H(h)_m"])
+        somDni+=tab[i]["Hb(n)_m"]
 
-        if (tt == 0) {
-          t++;
-        }
 
-        if ((compteur === 24 && sum == 0) || sum === Infinity) {
-          sum = 500;
-
-          if (sum / (24 - t) === Infinity) {
-            array.push(300);
-            compteur = 0;
-            sum = 0;
-            t = 0;
-          } else {
-            array.push(Math.round(sum / (24 - t)));
-            compteur = 0;
-            sum = 0;
-            t = 0;
-          }
-        } else if (compteur === 24 && sum != 0) {
-          array.push(Math.round(sum / (24 - t)));
-          compteur = 0;
-          sum = 0;
-          t = 0;
-        }
       }
-      console.log(array);
+       
+      setghi(somGhi)
+      setTb(somDni)
+      
+      ghiMonth=arrayGhi
+      tempMonth=arrayDni
 
-      let h = 0,re=0;
-       let a = 0;
-       let x = new Array();
-      let  ss = 0;
-      for (h = 0; h < array.length; h++) {
-        if (a == 30) {
-          x.push(parseInt(ss / 30));
-          
-           
- 
-          ss = 0;
-          a = 0;
-        }
-
-        ss += array[h];
-        a++;
      
-      }
-      ghiMonth = x;
-      setGhiJanv(22)
 
- 
-      let z = 0,
-        e = 0,
-        r = new Array(),
-        sss = 0;
-      for (z = 0; z < x.length; z++) {
-        e += x[z];
-      }
-      sss = e / x.length;
-      setghi(sss);
-
-      let s = 0,
-        i;
-      let counter = 0;
-      let b = new Array();
-      for (i = 0; i < tab.length; i++) {
-        if (counter == 24) {
-          b.push(s / 24);
-          counter = 0;
-          s = 0;
-        }
-
-        s += tab[i].T2m;
-        counter++;
-      }
-
-      let j,
-        k = 0;
-      let f = new Array(),
-        count = 0;
-      for (j = 0; j < b.length; j++) {
-        if (count == 30) {
-          setTempmonths([...tempmonths, k / 30]);
-          f.push(parseInt(k / 30));
-
-          count = 0;
-          k = 0;
-        }
-        k += b[j];
-        count++;
-      }
-      tempMonth = f;
-      console.log(tempMonth);
-
-      let o = 0;
-      var cnt = 0;
-      for (b = 0; b < f.length; b++) {
-        o += f[b];
-      }
-      cnt = o / f.length;
-
-      setTb(cnt);
+     
     }
+    
+     
   };
 
   function geo() {
     var address = refe.current.value;
+    
     refe.current.value = null;
 
-    geocodeString.geocode({ address: address }, function (results, status) {
+    geocodeString.geocode({ address: address }, function(results, status) {
       if (status == "OK") {
         setCenter(results[0].geometry.location);
         setAddress(results[0].formatted_address);
@@ -291,13 +251,13 @@ function MyMapComponent() {
           position: results[0].geometry.location,
         });
       } else {
-        alert("sdgdsgdsgsdg : " + status);
+        alert("location introuvable : " + status);
       }
     });
   }
 
   useEffect(
-    function () {
+    function() {
       map = new window.google.maps.Map(ref.current, {
         zoom: zoom,
         center: center,
@@ -324,7 +284,7 @@ function MyMapComponent() {
           }
         });
       }
-      window.google.maps.event.addListener(map, "zoom_changed", function () {
+      window.google.maps.event.addListener(map, "zoom_changed", function() {
         var zoom = map.getZoom();
         setZoom(zoom);
       });
@@ -404,20 +364,20 @@ function MyMapComponent() {
             </div>
             <div className="row">
               <div className="col-sm" id="tx">
-                Temperature moyenne en (C°)
+                Rayonnement direct normal en kw/m²
               </div>
 
               <div className="col-sm">
-                <h6>{tb.toPrecision(3)} </h6>
+                <h6>{parseInt(tb)} </h6>
               </div>
             </div>
             <div className="row">
               <div className="col-sm" id="tx">
-                global horizontal irradiation en (W/m²)
+                Rayonnement global horizontal en kw/m²
               </div>
 
               <div className="col-sm">
-                <h6>{ghi.toPrecision(3)} </h6>
+                <h6>{ghi} </h6>
               </div>
             </div>
 
