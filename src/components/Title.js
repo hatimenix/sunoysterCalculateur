@@ -7,13 +7,12 @@ function Title() {
   return (
     <div>
       <div className="haut">
-      <img src={ss} alt="sunoyster" id="imgsize" />
-        <img src={sos} alt="sunoyster" id="er" />
-   
+        <img src={ss} alt="sunoyster"  class="img-fluid" id="imgsize" />
+        <img src={sos} alt="sunoyster" class="img-fluid" id="er" />
       </div>
 
       <div className="imgHead">
-        <img src={bb} alt="bazta" id="imgsize1" />
+        <img src={bb} alt="bazta"  class="img-fluid" id="imgsize1" />
       </div>
     </div>
   );

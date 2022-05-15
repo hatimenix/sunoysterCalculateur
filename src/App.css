@@ -159,6 +159,15 @@ th{
   margin-left: 20px;
 
 }
+ 
+#alrt{
+  display: none;
+
+  margin-top: 10px;
+ height: 50px;
+
+
+}
 .search{
   display :flex;
 

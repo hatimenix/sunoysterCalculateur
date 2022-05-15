@@ -70,6 +70,7 @@ function App(props) {
   const [nbrunite, setNbrunite] = useState(0);
   const [esp, setEsp] = useState(0);
   const [dni, setDni] = useState();
+  const [tmpfluid,setTmpfluid]=useState();
   const [tghi, setTghi] = useState([
     128,
     149,
@@ -116,6 +117,17 @@ function App(props) {
   const [tubetype,setTubetype]=useState("");
 
   const ref = React.useRef(null);
+
+  const validate=(e)=>{
+    let al=document.getElementById('alrt')
+    console.log(e.target.value)
+
+    if(e.target.value>=90 && e.target.value<=175 || e.target.value==="" || e.target.value===null  ){ al.style.display="none";setTmpfluid(e.target.value); }
+    if(e.target.value<90 || e.target.value>175){ al.style.display="block";  }
+     
+     
+
+  }
   
    
 
@@ -507,7 +519,11 @@ function App(props) {
                         min={90}
                         max={175}
                         placeholder="inserer une temperature entre 90 et 175 C°"
+                        onChange={validate}
                       ></input>
+                      <div class="alert alert-danger" id="alrt" role="alert">
+  <p className="ajuster">Inserer une valeu entre 90 et 175 C° </p>
+</div>
                     </div>
                   </div>
                   <div className="row content">
@@ -528,11 +544,11 @@ function App(props) {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-sm-3">
+                    <div className="col-sm-3" id="ty">
                       <strong>Espace occupée : {esp} m² </strong>
                     </div>
-                    <div className="col-sm-3">
-                      <strong>energie electrique géneré : m² </strong>
+                    <div className="col-sm-3" id="ty">
+                      <strong>energie electrique géneré :  </strong>
                     </div>
                   </div>
                 </div>
@@ -561,7 +577,7 @@ function App(props) {
               <div className="accordion-body">
                 <div className="row" id="sunoysterchoisis16">
                   <div className="bg">
-                    <img src={log} alt="sunoyster16" id="azz"></img>
+                    <img src={log} alt="sunoyster16" class="img-fluid" id="azz"></img>
                   </div>
                   <p id="sf">
                     <strong>Sunoyster 16</strong>
@@ -569,7 +585,7 @@ function App(props) {
                 </div>
                 <div className="row" id="sunoysterchoisis8">
                   <div className="bg">
-                    <img src={cs} alt="sunoyster16" id="az"></img>
+                    <img src={cs} alt="sunoyster16" class="img-fluid" id="az"></img>
                   </div>
                   <p id="sf">
                     <strong>Sunoyster 8</strong>
