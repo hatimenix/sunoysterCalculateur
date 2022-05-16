@@ -3,13 +3,7 @@ import ChatBot from "react-simple-chatbot";
 import Title from "./components/Title";
 import Foter from "./components/Footer";
 import Footer from "./components/Footer";
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  
-  createContext,
-} from "react";
+import React, { useRef, useEffect, useState, createContext } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import MyMapComponent from "./MyMapComponent.js";
 import cs from "./sunoyster_8.png";
@@ -17,7 +11,7 @@ import context from "./context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
- 
+
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -36,7 +30,7 @@ import { checkboxClasses } from "@mui/material";
 
 let isSelect = false;
 let geocoder;
- 
+
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 
 let puMazout = 13;
@@ -70,7 +64,7 @@ function App(props) {
   const [nbrunite, setNbrunite] = useState(0);
   const [esp, setEsp] = useState(0);
   const [dni, setDni] = useState();
-  const [tmpfluid,setTmpfluid]=useState();
+  const [tmpfluid, setTmpfluid] = useState();
   const [tghi, setTghi] = useState([
     128,
     149,
@@ -114,22 +108,26 @@ function App(props) {
   var slider = useRef();
   var output = useRef();
   const [inits, setInits] = useState("");
-  const [tubetype,setTubetype]=useState("");
+  const [tubetype, setTubetype] = useState("");
 
   const ref = React.useRef(null);
 
-  const validate=(e)=>{
-    let al=document.getElementById('alrt')
-    console.log(e.target.value)
+  const validate = (e) => {
+    let al = document.getElementById("alrt");
+    console.log(e.target.value);
 
-    if(e.target.value>=90 && e.target.value<=175 || e.target.value==="" || e.target.value===null  ){ al.style.display="none";setTmpfluid(e.target.value); }
-    if(e.target.value<90 || e.target.value>175){ al.style.display="block";  }
-     
-     
-
-  }
-  
-   
+    if (
+      (e.target.value >= 90 && e.target.value <= 175) ||
+      e.target.value === "" ||
+      e.target.value === null
+    ) {
+      al.style.display = "none";
+      setTmpfluid(e.target.value);
+    }
+    if (e.target.value < 90 || e.target.value > 175) {
+      al.style.display = "block";
+    }
+  };
 
   const render = (Status) => {
     return <h1>{Status}</h1>;
@@ -155,7 +153,7 @@ function App(props) {
     if (e.target.value === "Mazout") {
       if (isNaN(e)) {
         let element = document.getElementById("alert");
-       element.style.display = "none";
+        element.style.display = "none";
       }
 
       if (consTherm !== 0) {
@@ -231,21 +229,12 @@ function App(props) {
     setInputFac(e * 0.89);
   };
 
-  const handleTubes=(e)=>{
+  const handleTubes = (e) => {
+    setTubetype(e.target.value);
 
-    setTubetype(e.target.value)
-
- if(e.target.value==="2TH"){
-
-   
- }
-
-
-
-  }
-
-
-
+    if (e.target.value === "2TH") {
+    }
+  };
 
   const sGHI = {
     ghi: ghi,
@@ -274,12 +263,18 @@ function App(props) {
   };
 
   const handleNbrUnite = (e) => {
-    setNbrunite(e.target.value);
-    if (che.checked) {
-      setEsp(e.target.value * 25);
-    }
-    if (ch.checked) {
-      setEsp(e.target.value * 56);
+    let v = document.getElementById("baz");
+    if (e.target.value > 20) {
+      v.style.display = "block";
+    } else {
+      v.style.display = "none";
+      setNbrunite(e.target.value);
+      if (che.checked) {
+        setEsp(e.target.value * 25);
+      }
+      if (ch.checked) {
+        setEsp(e.target.value * 56);
+      }
     }
   };
   const handleChang = (e) => {
@@ -501,7 +496,9 @@ function App(props) {
                           <option selected value=""></option>
                           <option value="2TH">2 Tubes hybrides</option>
                           <option value="2TT">2 Tubes thermiques</option>
-                          <option value="1T1E">1 Tube hybride et 1 Tube electrique</option>
+                          <option value="1T1E">
+                            1 Tube hybride et 1 Tube electrique
+                          </option>
                           <option value="PVPLUS">PV PLUS</option>
                         </select>
                       </div>
@@ -522,8 +519,10 @@ function App(props) {
                         onChange={validate}
                       ></input>
                       <div class="alert alert-danger" id="alrt" role="alert">
-  <p className="ajuster">Inserer une valeu entre 90 et 175 C° </p>
-</div>
+                        <p className="ajuster">
+                          Inserer une valeu entre 90 et 175 C°{" "}
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div className="row content">
@@ -541,14 +540,17 @@ function App(props) {
                         max={20}
                         placeholder="inserer un nombnre entre 1 et 20 unite "
                       ></input>
+                      <div class="alert alert-danger" id="baz" role="alert">
+                        nombre d'unite &le;20
+                      </div>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-sm-3" id="ty">
                       <strong>Espace occupée : {esp} m² </strong>
                     </div>
-                    <div className="col-sm-3" id="ty">
-                      <strong>energie electrique géneré :  </strong>
+                    <div clasdsName="col-sm-3" id="ty">
+                      <strong>energie electrique géneré : </strong>
                     </div>
                   </div>
                 </div>
@@ -577,7 +579,12 @@ function App(props) {
               <div className="accordion-body">
                 <div className="row" id="sunoysterchoisis16">
                   <div className="bg">
-                    <img src={log} alt="sunoyster16" class="img-fluid" id="azz"></img>
+                    <img
+                      src={log}
+                      alt="sunoyster16"
+                      class="img-fluid"
+                      id="azz"
+                    ></img>
                   </div>
                   <p id="sf">
                     <strong>Sunoyster 16</strong>
@@ -585,7 +592,12 @@ function App(props) {
                 </div>
                 <div className="row" id="sunoysterchoisis8">
                   <div className="bg">
-                    <img src={cs} alt="sunoyster16" class="img-fluid" id="az"></img>
+                    <img
+                      src={cs}
+                      alt="sunoyster16"
+                      class="img-fluid"
+                      id="az"
+                    ></img>
                   </div>
                   <p id="sf">
                     <strong>Sunoyster 8</strong>
@@ -671,6 +683,15 @@ function App(props) {
             </div>
           </div>
         </div>
+        <div className="container">
+
+
+        <button type="button" id="button" class="btn btn-primary btn-lg btn-block"> Calculer
+        l'autonomie
+        </button>
+        </div>
+       
+         
       </div>
     </context.Provider>
   );
