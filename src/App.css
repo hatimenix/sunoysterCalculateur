@@ -54,10 +54,19 @@
   width: 360px;
   height: 60px;
 }
-.container{
+#sze{
+
+  width: 385px;
+  height: 40px;
+  margin-right: 30px;
+}
+#pvp{
 
   display: flex;
-  justify-content: center;
+}
+#pvcheck{
+
+  margin-top: 5px;
 }
 .line{
 
@@ -147,7 +156,7 @@ th{
  }
 .row{
   margin-top: 20px;
-  display: flex;
+ 
 }
  
 .card{

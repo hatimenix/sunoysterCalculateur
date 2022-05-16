@@ -1,15 +1,15 @@
 import "./App.css";
-import ChatBot from "react-simple-chatbot";
+
 import Title from "./components/Title";
-import Foter from "./components/Footer";
-import Footer from "./components/Footer";
+
 import React, { useRef, useEffect, useState, createContext } from "react";
-import mapboxgl, { LngLat } from "mapbox-gl";
+
 import MyMapComponent from "./MyMapComponent.js";
 import cs from "./sunoyster_8.png";
 import context from "./context";
-
+import makeAnimated from "react-select/animated";
 import Select from "react-select";
+import Tooltip from "@mui/material/Tooltip";
 
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import log from "./download.jpg";
@@ -20,11 +20,10 @@ import {
   Spinner,
   ErrorComponent,
 } from "@googlemaps/react-wrapper";
-import { checkboxClasses } from "@mui/material";
 
 let isSelect = false;
 let geocoder;
-
+const animatedComponents = makeAnimated();
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 
 let puMazout = 13;
@@ -33,7 +32,6 @@ let puPropane = 12;
 let ceFioul = 10;
 let cePropane = 13;
 let ceMazout = 10;
-let submitButton;
 
 function loadAsyncScript(src) {
   return new Promise((resolve) => {
@@ -58,6 +56,7 @@ function App(props) {
   const [nbrunite, setNbrunite] = useState(0);
   const [esp, setEsp] = useState(0);
   const [dni, setDni] = useState();
+  const [energieThermique,setEnergiethermique]=useState(0)
   const [tmpfluid, setTmpfluid] = useState();
   const [tghi, setTghi] = useState([
     128,
@@ -89,8 +88,8 @@ function App(props) {
   ]);
 
   const [inputFac, setInputFac] = useState("");
-  const [energieElectrique, setEnergieelecrtique] = useState();
-  const [tube,setTube]=useState("")
+  const [energieElectrique, setEnergieelecrtique] = useState(0);
+  const [tube, setTube] = useState("");
   const [inputCons, setInputCons] = useState("");
   const [espace, sertEspace] = useState("");
   const [tempFluid, setTempFluid] = useState();
@@ -224,8 +223,6 @@ function App(props) {
     setInputFac(e * 0.89);
   };
 
-   
-
   const options = [
     { value: "2th", label: "2 Tubes hybrides" },
     { value: "2tt", label: "2 Tubes thermiques" },
@@ -289,31 +286,50 @@ function App(props) {
     }
   };
   const handleSelect=(e)=>{
-    let fd=document.getElementById('sss')
 
-     
-    console.log(e[0].value)
-     
+   if(e.target.value==="2th" && ch.checked){
 
+    setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
+    setEnergiethermique(sGHI.dni*15*0.28*1.62)
+   }
+   if(e.target.value==="2th" && che.checked){
 
-    if(e[0].value==="2th" && che.checked ){
-      console.log(tmpfluid)
-      console.log(sGHI.dni)
+    setEnergieelecrtique((sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44)
+    setEnergiethermique(sGHI.dni*15*0.28*1.62*0.44)
+   }
+   if(e.target.value==="2tt" && ch.checked){
 
-      setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
-    }
-     
-    if(e[0].value==="2tt" && che.checked ){
-      
-
-      setEnergieelecrtique(sGHI.dni*15*0.28*1.62)
-      
-    }
-     
     
+    setEnergiethermique(sGHI.dni*15*0.28*1.62)
+    setEnergieelecrtique(0)
+   }
+   if(e.target.value==="2tt" && che.checked){
+
+    setEnergiethermique((sGHI.dni*15*0.28*1.62)*0.44)
+    setEnergieelecrtique(0)
+   }
+   if(e.target.value==="1e1t" && ch.checked){
+     let tubethermique=(sGHI.dni*15*0.75)/2
+     let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
+
+    setEnergieelecrtique(tubeElectrique)
+    setEnergiethermique(tubethermique)
+   }
+   if(e.target.value==="1e1t" && che.checked){
+    let tubethermique=(sGHI.dni*15*0.75)*0.44/2
+    let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44/2
+
+   setEnergieelecrtique(tubeElectrique)
+   setEnergiethermique(tubethermique)
   }
-  console.log(energieElectrique)
- 
+
+   
+
+
+  }
+
+  
+  console.log(energieElectrique);
 
   return (
     <context.Provider value={sGHI}>
@@ -470,7 +486,7 @@ function App(props) {
               <div className="accordion-body">
                 <div classsName="form-group form-group-image-checkbox is-invalid">
                   <div class="row">
-                    <div className="col-sm" id="t">
+                    <div className="col-sm" id="ty">
                       <strong>Modele</strong>
                     </div>
                     <div class="col-md-3">
@@ -502,32 +518,6 @@ function App(props) {
                       </div>
                     </div>
                   </div>
-
-                  <div className="row content">
-                    <div className="col-sm" id="t">
-                      {" "}
-                      <p>
-                        <strong>Type du modèle</strong>
-                      </p>{" "}
-                    </div>
-
-                    <div className="col-sm">
-                      
-                        <Select
-                        id="sss"
-                        isClearable={true}
-                         
-                         
-                          isMulti
-                           
-                          options={options}
-                          onChange={handleSelect}
-                          className="basic-multi-select"
-                          classNamePrefix="select"
-                        />
-                       
-                    </div>
-                  </div>
                   <div className="row content">
                     <div className="col-sm" id="ty">
                       <p>
@@ -549,7 +539,7 @@ function App(props) {
                       </div>
                     </div>
                   </div>
-                  <div className="row content">
+                  <div className="row " id="pvp">
                     <div className="col-sm" id="ty">
                       <p>
                         <strong>Nombre d'unités </strong>
@@ -565,16 +555,70 @@ function App(props) {
                         placeholder="inserer un nombnre entre 1 et 20 unite "
                       ></input>
                       <div class="alert alert-danger" id="baz" role="alert">
-                        nombre d'unite &le;20
+                        nombre d'unite &le; 20
                       </div>
                     </div>
                   </div>
-                  <div className="row">
+
+                  <div className="row content">
+                    <div className="col-sm" id="ty">
+                      {" "}
+                      <p>
+                        <strong>Type du modèle</strong>
+                      </p>{" "}
+                    </div>
+
+                    <div className="col-sm" >
+                      <div id="pvp" >
+                      <select
+                        id="sze"
+                        class="form-select form-select-sm"
+                        aria-label=".form-select-sm example"
+                        onChange={handleSelect}
+                        
+                      >
+                        <option selected>Choisissez votre modèle ...</option>
+                        <option value="2th">2 tubes hybrides</option>
+                        <option value="2tt">2 tubes thermiques</option>
+                        <option value="1e1t">
+                          1 tube thermique et 1 tube electrique
+                        </option>
+                      </select>
+                      <Tooltip title="Ajouter le PV PLUS">
+                        <div class="form-check form-switch" id="pvcheck">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckChecked"
+                            unchecked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexSwitchCheckChecked"
+                          >
+                            {" "}
+                            PV PLUS
+                          </label>
+                        </div>
+                      </Tooltip>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  
+                  <div className="row" >
                     <div className="col-sm-3" id="ty">
                       <strong>Espace occupée : {esp} m² </strong>
                     </div>
                     <div clasdsName="col-sm-3" id="ty">
-                      <strong>energie electrique géneré : {energieElectrique} kwh/m²</strong>
+                      <strong>
+                        energie electrique géneré : {parseInt(energieElectrique)} kwh/m²
+                      </strong>
+                    </div>
+                    <div clasdsName="col-sm-3" id="ty">
+                      <strong>
+                        energie thermique géneré : {parseInt(energieThermique)} kwh/m²
+                      </strong>
                     </div>
                   </div>
                 </div>
