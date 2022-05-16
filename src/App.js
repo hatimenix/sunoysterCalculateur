@@ -7,7 +7,7 @@ import React, {
   useRef,
   useEffect,
   useState,
-  ReactDOM,
+  
   createContext,
 } from "react";
 import mapboxgl, { LngLat } from "mapbox-gl";
@@ -155,7 +155,7 @@ function App(props) {
     if (e.target.value === "Mazout") {
       if (isNaN(e)) {
         let element = document.getElementById("alert");
-        ReactDOM.findDOMNode(element).style.display = "none";
+       element.style.display = "none";
       }
 
       if (consTherm !== 0) {
@@ -187,7 +187,7 @@ function App(props) {
   const maybeConsTherm = (e) => {
     if (isNaN(e)) {
       let element = document.getElementById("alert");
-      ReactDOM.findDOMNode(element).style.display = "none";
+      element.style.display = "none";
     }
 
     setConsTherm(e);
@@ -204,7 +204,7 @@ function App(props) {
   const maybeFacTherm = (e) => {
     if (isNaN(e)) {
       let element = document.getElementById("alert");
-      ReactDOM.findDOMNode(element).style.display = "none";
+      element.style.display = "none";
     }
 
     setfactTherm(e);
@@ -225,7 +225,7 @@ function App(props) {
   const maybeInputFac = (e) => {
     if (isNaN(e)) {
       let element = document.getElementById("alert");
-      ReactDOM.findDOMNode(element).style.display = "none";
+      element.style.display = "none";
     }
 
     setInputFac(e * 0.89);
