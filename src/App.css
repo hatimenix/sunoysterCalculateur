@@ -85,6 +85,10 @@
 
   display: none;
 }
+#sss{
+
+  width: 450px;
+}
 #cont{
 
   display: flex;
@@ -143,6 +147,7 @@ th{
  }
 .row{
   margin-top: 20px;
+  display: flex;
 }
  
 .card{

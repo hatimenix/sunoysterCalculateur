@@ -8,18 +8,12 @@ import mapboxgl, { LngLat } from "mapbox-gl";
 import MyMapComponent from "./MyMapComponent.js";
 import cs from "./sunoyster_8.png";
 import context from "./context";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
-import PropTypes from "prop-types";
 
-import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
+import Select from "react-select";
 
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import log from "./download.jpg";
-import axios from "axios";
+
 import {
   Wrapper,
   Status,
@@ -95,7 +89,8 @@ function App(props) {
   ]);
 
   const [inputFac, setInputFac] = useState("");
-
+  const [energieElectrique, setEnergieelecrtique] = useState();
+  const [tube,setTube]=useState("")
   const [inputCons, setInputCons] = useState("");
   const [espace, sertEspace] = useState("");
   const [tempFluid, setTempFluid] = useState();
@@ -229,13 +224,16 @@ function App(props) {
     setInputFac(e * 0.89);
   };
 
-  const handleTubes = (e) => {
-    setTubetype(e.target.value);
+   
 
-    if (e.target.value === "2TH") {
-    }
-  };
+  const options = [
+    { value: "2th", label: "2 Tubes hybrides" },
+    { value: "2tt", label: "2 Tubes thermiques" },
+    { value: "1e1t", label: "1 tube electrique et 1 tube thermique " },
+    { value: "PVP", label: "PV plus" },
+  ];
 
+  const MyComponent = () => <Select options={options} />;
   const sGHI = {
     ghi: ghi,
     dni: dni,
@@ -256,7 +254,10 @@ function App(props) {
   let ch = document.getElementById("ck1d");
   const handlChan = (e) => {
     if (e.target.checked) {
+      ch.checked = false;
+
       chek.style.display = "block";
+      chekb.style.display = "none";
     } else {
       chek.style.display = "none";
     }
@@ -279,12 +280,40 @@ function App(props) {
   };
   const handleChang = (e) => {
     if (e.target.checked) {
+      che.checked = false;
       chekb.style.display = "block";
+      chek.style.display = "none";
       console.log(chekb.style.display);
     } else {
       chekb.style.display = "none";
     }
   };
+  const handleSelect=(e)=>{
+    let fd=document.getElementById('sss')
+
+     
+    console.log(e[0].value)
+     
+
+
+    if(e[0].value==="2th" && che.checked ){
+      console.log(tmpfluid)
+      console.log(sGHI.dni)
+
+      setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
+    }
+     
+    if(e[0].value==="2tt" && che.checked ){
+      
+
+      setEnergieelecrtique(sGHI.dni*15*0.28*1.62)
+      
+    }
+     
+    
+  }
+  console.log(energieElectrique)
+ 
 
   return (
     <context.Provider value={sGHI}>
@@ -483,25 +512,20 @@ function App(props) {
                     </div>
 
                     <div className="col-sm">
-                      {" "}
-                      <div className="col-sm" id="cd">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          id="bn"
-                          onChange={(e) => {
-                            handleTubes(e);
-                          }}
-                        >
-                          <option selected value=""></option>
-                          <option value="2TH">2 Tubes hybrides</option>
-                          <option value="2TT">2 Tubes thermiques</option>
-                          <option value="1T1E">
-                            1 Tube hybride et 1 Tube electrique
-                          </option>
-                          <option value="PVPLUS">PV PLUS</option>
-                        </select>
-                      </div>
+                      
+                        <Select
+                        id="sss"
+                        isClearable={true}
+                         
+                         
+                          isMulti
+                           
+                          options={options}
+                          onChange={handleSelect}
+                          className="basic-multi-select"
+                          classNamePrefix="select"
+                        />
+                       
                     </div>
                   </div>
                   <div className="row content">
@@ -550,7 +574,7 @@ function App(props) {
                       <strong>Espace occupée : {esp} m² </strong>
                     </div>
                     <div clasdsName="col-sm-3" id="ty">
-                      <strong>energie electrique géneré : </strong>
+                      <strong>energie electrique géneré : {energieElectrique} kwh/m²</strong>
                     </div>
                   </div>
                 </div>
@@ -684,14 +708,15 @@ function App(props) {
           </div>
         </div>
         <div className="container">
-
-
-        <button type="button" id="button" class="btn btn-primary btn-lg btn-block"> Calculer
-        l'autonomie
-        </button>
+          <button
+            type="button"
+            id="button"
+            class="btn btn-primary btn-lg btn-block"
+          >
+            {" "}
+            Calculer l'autonomie
+          </button>
         </div>
-       
-         
       </div>
     </context.Provider>
   );
