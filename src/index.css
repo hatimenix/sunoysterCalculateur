@@ -125,7 +125,7 @@ th, td{
       
      #imgsize{
 
-      width: 100px;
+      width: 120px;
      }
      table {
       border: 0;
@@ -222,37 +222,9 @@ th, td{
 
     .hau{
       display: flex;
-      margin-left: 10px;
+      
 
     }
 
   }
  
-
-  @media screen and (max-width:600px){
-
-
-
-    .haut{
-
-      margin-left: 120px;
-    }
-    .line{
-      width: 100px;
-       
-    }
-    .accordion-button{
-
-        width:400px;
-        margin-left: 0;
-    }
-    .accordion-item{
-      margin-left: 0;
-
-    }
-
-    .accordion{
-      margin-left: 0;
-    }
-
-  }

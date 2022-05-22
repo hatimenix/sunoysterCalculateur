@@ -13,6 +13,10 @@
 
 
 @media screen and (max-width:600px){
+  .App{
+
+    width: 400px;
+  }
 
 
 .imgsize1{
@@ -21,10 +25,10 @@
 }
   .haut{
 
-    margin-left: 30px;
+    margin-left: 0px;
   }
   .line{
-    width: 100px;
+    width: 500px;
      
   }
   .accordion-button{
@@ -45,6 +49,13 @@
   .accordion-item{
     width:350px;
       margin-left: 0;
+  }
+  .ctd{
+
+     width: auto;
+     height: 100%;
+    margin-left: 20px;
+
   }
  
 
