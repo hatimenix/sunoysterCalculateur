@@ -58,7 +58,7 @@ function Home() {
         </p>
         <br />
         <div className="arrayw">
-          <table class="t1">
+          <table className="t1">
             <tr>
               <th>Paramètres</th>
               <th>Sunoyster 16</th>
