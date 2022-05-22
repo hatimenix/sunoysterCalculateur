@@ -112,6 +112,101 @@ th, td{
 
 
  }
+ 
+ @media screen and (max-width:530px){
+      
+  #imgsize{
+
+   width: 100px;
+  }
+  table {
+   border: 0;
+ }
+
+ table caption {
+   font-size: 1.3em;
+ }
+ .arrayw{
+   margin-left: 20px;
+ }
+ 
+ table th {
+   border: none;
+   clip: rect(0 0 0 0);
+   height: 1px;
+   margin: -1px;
+   overflow: hidden;
+   padding: 0;
+   position: absolute;
+   width: 1px;
+ }
+ 
+ table tr {
+   border-bottom: 3px solid #ddd;
+   display: block;
+   margin-bottom: .625em;
+ }
+ 
+ table td {
+   border-bottom: 1px solid #ddd;
+   display: block;
+   font-size: .8em;
+   text-align: right;
+ }
+ 
+ table td::before {
+   /*
+   * aria-label has no advantage, it won't be read inside a table
+   content: attr(aria-label);
+   */
+   content: attr(data-label);
+   float: left;
+   font-weight: bold;
+   text-transform: uppercase;
+ }
+ 
+ table td:last-child {
+   border-bottom: 0;
+ }
+  #imgsize1{
+
+   width: 120px;
+   margin-left: 90px;
+  }
+  #er{
+
+   width: 100px;
+  }
+  #text{
+
+   width: 400px;
+   margin-left: 0;
+  
+  
+  }
+  .text-justify {
+  width: 420px;
+    margin-left: 20px;
+    margin-right: 20px;
+   
+  }
+
+.butt{
+margin-left: 150px;
+}
+.content{
+margin-right: 20px;
+}
+
+
+
+ .hau{
+   display: flex;
+   margin-left: 88px;
+
+ }
+
+}
 
  
   
@@ -193,10 +288,7 @@ th, td{
        margin-right: 20px;
       
      }
-.t1{
-  width: 0px;
-  overflow-x: auto;
-}
+ 
 .butt{
   margin-left: 10px;
 }
