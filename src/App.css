@@ -81,22 +81,7 @@
 
   margin-top: 10px;
 }
-.sizing{
-
-  overflow:hidden;
-padding-bottom:56.25%;
-position:relative;
-height:0;
-}
-.sizing iframe{
-  left:0;
-top:0;
-height:100%;
-width:100%;
-position:absolute;
-
-}
-
+   
 
 #sunoysterchoisis16{
 
@@ -227,6 +212,11 @@ th{
 #map {
   height: 500px;
   width: 950px;
+  width: 100%;
+
+  height: 400px;
+
+  background-color: grey;
 }
 .containe{
 

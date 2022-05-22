@@ -312,7 +312,7 @@ function MyMapComponent(props) {
 
   return (
     <div>
-      <div ref={ref} id="map" />
+      <div ref={ref} id="map"   />
       <div className="containe">
         <div className="row">
           <div className="col-sm" id="txt">
