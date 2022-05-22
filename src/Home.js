@@ -1,12 +1,10 @@
 import React from "react";
- 
- 
- 
-import Tilte from "./components/Title"
+
+import Tilte from "./components/Title";
 import sos from "./SOS.jpg";
 import ss from "./ALBARRAY_Consulting.jpg";
 import bb from "./dynamic_so16.gif";
- 
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopyright } from "@fortawesome/free-solid-svg-icons";
 import sunoyster_18 from "./sunoyster_16.png";
@@ -14,11 +12,7 @@ import sunoyster_8 from "./sunoyster_8.png";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-
-  const geocodeString=(searchInput)=>{
-
-    
-  }
+  const geocodeString = (searchInput) => {};
   let navigate = useNavigate();
   const routeChange = () => {
     let path = `expenses`;
@@ -26,20 +20,19 @@ function Home() {
   };
   return (
     <div className="container">
-    <div>
-      <div className="hau">
-      <img src={ss} alt="sunoyster" id="imgsize" />
-        <img src={sos} alt="sunoyster" id="er" />
-   
+      <div>
+        <div className="hau">
+          <img src={ss} alt="sunoyster" id="imgsize" />
+          <img src={sos} alt="sunoyster" id="er" />
+        </div>
+
+        <div className="imgHead">
+          <img src={bb} alt="bazta" id="imgsize1" />
+        </div>
       </div>
 
-      <div className="imgHead">
-        <img src={bb} alt="bazta" id="imgsize1" />
-      </div>
-    </div>
-      
       <div className="content">
-        <p id="text" class="text-justify">
+        <p id="text" className="text-justify">
           <strong>
             CALC <FontAwesomeIcon icon={faCopyright} />
           </strong>{" "}
@@ -47,7 +40,7 @@ function Home() {
           solaires <strong>Sunoyster</strong>
         </p>{" "}
         <br />
-        <p class="text-justify">
+        <p className="text-justify">
           Les générateurs solaires Sunoyster génèrent simultanément de l’énergie
           électrique et thermique. Ils suivent la trajectoire du soleil par un
           système de tracking en horizontal et en verticale. En cas de
