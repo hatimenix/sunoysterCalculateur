@@ -40,7 +40,7 @@ function Home() {
           solaires <strong>Sunoyster</strong>
         </p>{" "}
         <br />
-        <p className="text-justify">
+        <p className="text-justify" id="ds">
           Les générateurs solaires Sunoyster génèrent simultanément de l’énergie
           électrique et thermique. Ils suivent la trajectoire du soleil par un
           système de tracking en horizontal et en verticale. En cas de

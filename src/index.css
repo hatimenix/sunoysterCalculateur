@@ -131,7 +131,7 @@ th, td{
       font-size: 1.3em;
     }
     .arrayw{
-      margin-left: 90px;
+      margin-left: 20px;
     }
     
     table th {
@@ -175,7 +175,7 @@ th, td{
      #imgsize1{
 
       width: 120px;
-      margin-left: 250px;
+      margin-left: 90px;
      }
      #er{
 
@@ -184,24 +184,31 @@ th, td{
      #text{
 
       width: 400px;
-      margin-left: 130px;
+      margin-left: 48px;
+     
      }
      .text-justify {
-       width: 500px;
-       margin-left: 80px;
+     
+       margin-left: 20px;
+       margin-right: 20px;
+      
      }
 .t1{
   width: 0px;
   overflow-x: auto;
 }
 .butt{
-  margin-left: 180px;
+  margin-left: 10px;
 }
+.content{
+  margin-right: 20px;
+}
+ 
 
 
     .hau{
       display: flex;
-      margin-left: 200px;
+      margin-left: 88px;
 
     }
 
