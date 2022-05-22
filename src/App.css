@@ -10,6 +10,51 @@
   margin-left: 180px;
 
 }
+
+
+@media screen and (max-width:600px){
+
+
+.imgsize1{
+
+  height: 100px;
+}
+  .haut{
+
+    margin-left: 30px;
+  }
+  .line{
+    width: 100px;
+     
+  }
+  .accordion-button{
+    width:350px;
+    margin-left: 0;
+      
+  }
+  .accordion-body{
+    width:350px;
+    margin-left: 0;
+
+  }
+  .accordion-header{
+    width:350px;
+    margin-left: 0;
+
+  }
+  .accordion-item{
+    width:350px;
+      margin-left: 0;
+  }
+ 
+
+  .accordion{
+    
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+}
 #az{
   width: 300px;
   height: 200px;
@@ -36,6 +81,23 @@
 
   margin-top: 10px;
 }
+.sizing{
+
+  overflow:hidden;
+padding-bottom:56.25%;
+position:relative;
+height:0;
+}
+.sizing iframe{
+  left:0;
+top:0;
+height:100%;
+width:100%;
+position:absolute;
+
+}
+
+
 #sunoysterchoisis16{
 
   display: flex;
@@ -207,4 +269,9 @@ th{
 
   height: 90px;
   margin-top: 10px;
+}
+
+@media screen and(max-width:600px){
+
+
 }

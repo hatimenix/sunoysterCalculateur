@@ -228,3 +228,31 @@ th, td{
 
   }
  
+
+  @media screen and (max-width:600px){
+
+
+
+    .haut{
+
+      margin-left: 120px;
+    }
+    .line{
+      width: 100px;
+       
+    }
+    .accordion-button{
+
+        width:400px;
+        margin-left: 0;
+    }
+    .accordion-item{
+      margin-left: 0;
+
+    }
+
+    .accordion{
+      margin-left: 0;
+    }
+
+  }
