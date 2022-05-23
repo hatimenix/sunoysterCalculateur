@@ -329,7 +329,7 @@ function MyMapComponent(props) {
                 ref={refe}
                 placeholder="Search location ..... "
               />
-              <button className="btn btn-outline-primary" onClick={geo}>
+              <button className="btn btn-outline-primary" id="bht" onClick={geo}>
                 Chercher
               </button>
             </div>

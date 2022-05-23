@@ -229,3 +229,62 @@ th, td{
 
   }
  
+
+@media screen and (max-width:600px){
+  .App{
+
+    width: 400px;
+  }
+  #txt{
+    display: none;
+  }
+   
+
+
+.imgsize1{
+
+  height: 100px;
+}
+  .haut{
+
+    margin-left: 0px;
+  }
+  .line{
+     margin-left: 0;
+     
+  }
+  .accordion-button{
+    width:350px;
+    margin-left: 0;
+      
+  }
+  .accordion-body{
+    width:350px;
+    margin-left: 0;
+
+  }
+  .accordion-header{
+    width:350px;
+    margin-left: 0;
+
+  }
+  .accordion-item{
+    width:350px;
+      margin-left: 0;
+  }
+  .ctd{
+
+     width: auto;
+     height: 100%;
+    margin-left: 20px;
+
+  }
+ 
+
+  .accordion{
+    
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+}

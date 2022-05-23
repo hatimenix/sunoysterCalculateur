@@ -13,10 +13,26 @@
 
 
 @media screen and (max-width:600px){
+  .search{
+
+    margin-left: 0;
+  }
+  #bht{
+
+    
+    margin-left: 0;
+    padding-right: 1px;
+    padding-left: 1px;
+    margin-right: 10px;
+  }
   .App{
 
     width: 400px;
   }
+  #txt{
+    display: none;
+  }
+   
 
 
 .imgsize1{
@@ -28,7 +44,7 @@
     margin-left: 0px;
   }
   .line{
-    width: 500px;
+     margin-left: 0;
      
   }
   .accordion-button{
