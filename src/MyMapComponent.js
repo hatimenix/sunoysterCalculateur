@@ -30,7 +30,8 @@ let ht = 0,
   fs = 0;
 let myChart = null;
 let ghiMonth, tempMonth;
-let arrayGhi=[128,149,191,218,232,232,226,214,173,153,113,116],arrayDni=[222,212,229,246,225,226,192,202,170,183,155,197]
+let arrayGhi = [128, 149, 191, 218, 232, 232, 226, 214, 173, 153, 113, 116],
+  arrayDni = [222, 212, 229, 246, 225, 226, 192, 202, 170, 183, 155, 197];
 
 let map;
 let raddatabase = "PVGIS-SARAH2";
@@ -44,13 +45,11 @@ const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 const gecoderApi = "https://maps.googleapis.com/maps/api/geocode/json";
 
 function MyMapComponent(props) {
- 
   const [zoom, setZoom] = useState(8);
   const [lat, setLat] = useState(30.427755);
   const [inp, setInp] = useState("");
   const [tb, setTb] = useState(2400);
   const [ghi, setghi] = useState(2127);
-   
 
   const [address, setAddress] = useState("Agadir Morocco");
   const [lng, setLng] = useState(-9.598107);
@@ -61,28 +60,15 @@ function MyMapComponent(props) {
   var ref = useRef();
 
   var searchInput = document.getElementById("bb");
-   
 
-    const contextValue= useContext(context)
+  const contextValue = useContext(context);
 
-    useEffect(()=>{
-      contextValue.setGhi(ghi)
-      contextValue.setDni(tb)
-      contextValue.setTghi(arrayGhi)
-      contextValue.setTdni(arrayDni)
-
- 
-
-    },[ghi,tb])
-  
- 
- 
-   
-
-
-
-  
- 
+  useEffect(() => {
+    contextValue.setGhi(ghi);
+    contextValue.setDni(tb);
+    contextValue.setTghi(arrayGhi);
+    contextValue.setTdni(arrayDni);
+  }, [ghi, tb]);
 
   useEffect(() => {
     const labels = [
@@ -161,39 +147,30 @@ function MyMapComponent(props) {
     if (ress) {
       const tab = ress.data.outputs.monthly;
 
-       arrayGhi= new Array();
-      let i=0;
-     arrayDni=new Array()
-      let somGhi=0,somDni=0
+      arrayGhi = new Array();
+      let i = 0;
+      arrayDni = new Array();
+      let somGhi = 0,
+        somDni = 0;
 
-      for(i=0;i<12;i++){
-
-        arrayDni.push(tab[i]["Hb(n)_m"])
-        arrayGhi.push(tab[i]["H(h)_m"])
-        somGhi+=parseInt(tab[i]["H(h)_m"])
-        somDni+=tab[i]["Hb(n)_m"]
-
-
+      for (i = 0; i < 12; i++) {
+        arrayDni.push(tab[i]["Hb(n)_m"]);
+        arrayGhi.push(tab[i]["H(h)_m"]);
+        somGhi += parseInt(tab[i]["H(h)_m"]);
+        somDni += tab[i]["Hb(n)_m"];
       }
-       
-      setghi(somGhi)
-      setTb(somDni)
-      
-      ghiMonth=arrayGhi
-      tempMonth=arrayDni
 
-     
+      setghi(somGhi);
+      setTb(somDni);
 
-     
+      ghiMonth = arrayGhi;
+      tempMonth = arrayDni;
     }
-    
-     
   };
-
 
   function geo() {
     var address = refe.current.value;
-    
+
     refe.current.value = null;
 
     geocodeString.geocode({ address: address }, function(results, status) {
@@ -224,14 +201,11 @@ function MyMapComponent(props) {
       map = new window.google.maps.Map(ref.current, {
         zoom: zoom,
         center: center,
-        
+        gestureHandling: 'greedy'
       });
 
       geocoder = new window.google.maps.Geocoder();
-      window.google.maps.event.addListener(map, 'click', function(event){
-        this.setOptions({scrollwheel:true});
-      });
-
+      
       const marker = new window.google.maps.Marker({
         position: center,
         map: map,
@@ -279,7 +253,7 @@ function MyMapComponent(props) {
 
   return (
     <div>
-      <div ref={ref} id="map"   />
+      <div ref={ref} id="map" />
       <div className="containe">
         <div className="row">
           <div className="col-sm" id="txt">
@@ -296,7 +270,11 @@ function MyMapComponent(props) {
                 ref={refe}
                 placeholder="chercher l'emplacement  ..... "
               />
-              <button className="btn btn-outline-primary" id="bht" onClick={geo}>
+              <button
+                className="btn btn-outline-primary"
+                id="bht"
+                onClick={geo}
+              >
                 Chercher
               </button>
             </div>
@@ -340,7 +318,7 @@ function MyMapComponent(props) {
             </div>
             <div className="row">
               <div className="col-sm" id="tx">
-                Rayonnement global  annuel horizontal en kw/m²
+                Rayonnement global annuel horizontal en kw/m²
               </div>
 
               <div className="col-sm">

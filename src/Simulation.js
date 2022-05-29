@@ -16,7 +16,7 @@ function Simulation() {
                 aria-expanded="true"
                 aria-controls="collapseOne"
               >
-                Collapsible Group Item #1
+                Simulation d'autonomie énergetique 
               </button>
             </h5>
           </div>
