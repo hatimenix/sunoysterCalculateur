@@ -4,6 +4,7 @@ import './index.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Home from './Home';
 import App from "./App"
+import Simulation from './Simulation'
  
 import { render } from "react-dom"
 import reportWebVitals from './reportWebVitals';
@@ -16,6 +17,7 @@ import { BrowserRouter,Route,Routes } from "react-router-dom";
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="expenses" element={<App />} />
+    <Route path="/simulation" element={<Simulation />} />
        
      
     </Routes>

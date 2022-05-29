@@ -126,7 +126,7 @@
 
 }
 #button{
-
+margin-left: 380px;
   margin-top: 30px;
   width: 360px;
   height: 60px;
@@ -144,6 +144,27 @@
 #pvcheck{
 
   margin-top: 5px;
+  
+}
+.accordio{
+
+  width: 1000px;
+  background-color: #04AA6D;
+  margin-top: 90px;
+  margin-left: 180px;
+}
+#bodys{
+  margin-left: 180px;
+  width: 1000px;
+  
+}
+#titre{
+
+
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 .line{
 
@@ -159,9 +180,19 @@
 
   margin-left: 50px;
 }
+#height{
+  height: 95px;
+}
+#typeModele{
+  margin-top: 10px;
+  margin-left: 40px;
+}
+ 
+
 #ty{
 
   margin-left: 30px;
+  
 }
 #modele{
   margin-top: 30px;

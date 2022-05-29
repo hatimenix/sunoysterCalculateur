@@ -44,51 +44,13 @@ const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 const gecoderApi = "https://maps.googleapis.com/maps/api/geocode/json";
 
 function MyMapComponent(props) {
-  const [ghiJan, setGhiJanv] = useState();
-  const [ghiFev, setGhiFev] = useState();
-  const [ghiMar, setGhiMar] = useState();
-  const [ghiAvr, setGhiAvr] = useState();
-  const [ghiMai, setGhiMai] = useState();
-  const [ghiJuin, setGhiJuin] = useState();
-  const [ghiJuil, setGhiJuil] = useState();
-  const [ghiAout, setGhiAout] = useState();
-  const [ghiSep, setGhiSep] = useState();
-  const [ghiOct, setGhiOct] = useState();
-  const [ghiNov, setGhiNov] = useState();
-  const [ghiDec, setGhiDec] = useState();
+ 
   const [zoom, setZoom] = useState(8);
   const [lat, setLat] = useState(30.427755);
   const [inp, setInp] = useState("");
   const [tb, setTb] = useState(2400);
   const [ghi, setghi] = useState(2127);
-  const [ghimonths, setGhimonths] = useState([
-    411,
-    435,
-    490,
-    600,
-    556,
-    537,
-    497,
-    545,
-    491,
-    446,
-    418,
-    323,
-  ]);
-  const [tempmonths, setTempmonths] = useState([
-    14,
-    14,
-    16,
-    17,
-    17,
-    24,
-    24,
-    23,
-    22,
-    21,
-    18,
-    15,
-  ]);
+   
 
   const [address, setAddress] = useState("Agadir Morocco");
   const [lng, setLng] = useState(-9.598107);
@@ -160,7 +122,7 @@ function MyMapComponent(props) {
             yAxisID: "y",
           },
           {
-            type: "line",
+            type: "bar",
             label: "DNI en kw/m²",
 
             data: tempMonth,
@@ -228,6 +190,7 @@ function MyMapComponent(props) {
      
   };
 
+
   function geo() {
     var address = refe.current.value;
     
@@ -261,9 +224,13 @@ function MyMapComponent(props) {
       map = new window.google.maps.Map(ref.current, {
         zoom: zoom,
         center: center,
+        
       });
 
       geocoder = new window.google.maps.Geocoder();
+      window.google.maps.event.addListener(map, 'click', function(event){
+        this.setOptions({scrollwheel:true});
+      });
 
       const marker = new window.google.maps.Marker({
         position: center,
@@ -327,7 +294,7 @@ function MyMapComponent(props) {
                 type="text"
                 id="bb"
                 ref={refe}
-                placeholder="Search location ..... "
+                placeholder="chercher l'emplacement  ..... "
               />
               <button className="btn btn-outline-primary" id="bht" onClick={geo}>
                 Chercher
@@ -349,7 +316,7 @@ function MyMapComponent(props) {
               </div>
 
               <div className="col-sm">
-                <h6>{lat.toPrecision(3)}</h6>
+                <h6>{lat.toPrecision(6)}</h6>
               </div>
             </div>
 
@@ -359,12 +326,12 @@ function MyMapComponent(props) {
               </div>
 
               <div className="col-sm">
-                <h6> {lng.toPrecision(3)}</h6>
+                <h6> {lng.toPrecision(5)}</h6>
               </div>
             </div>
             <div className="row">
               <div className="col-sm" id="tx">
-                Rayonnement direct normal en kw/m²
+                Rayonnement direct annuel normal en kw/m²
               </div>
 
               <div className="col-sm">
@@ -373,7 +340,7 @@ function MyMapComponent(props) {
             </div>
             <div className="row">
               <div className="col-sm" id="tx">
-                Rayonnement global horizontal en kw/m²
+                Rayonnement global  annuel horizontal en kw/m²
               </div>
 
               <div className="col-sm">

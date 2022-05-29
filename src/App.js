@@ -3,13 +3,23 @@ import "./App.css";
 import Title from "./components/Title";
 
 import React, { useRef, useEffect, useState, createContext } from "react";
-
+import { useNavigate } from "react-router-dom";
 import MyMapComponent from "./MyMapComponent.js";
 import cs from "./sunoyster_8.png";
 import context from "./context";
 import makeAnimated from "react-select/animated";
 import Select from "react-select";
 import Tooltip from "@mui/material/Tooltip";
+import {
+  Chart as ChartJS,
+  LinearScale,
+  CategoryScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Legend,
+  registerables as registerablesJS,
+} from "chart.js";
 
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import log from "./download.jpg";
@@ -20,8 +30,17 @@ import {
   Spinner,
   ErrorComponent,
 } from "@googlemaps/react-wrapper";
+import { green } from "@mui/material/colors";
+
+let tabEnergieElectrique;
+let tabEnergieThermique;
+
 
 let isSelect = false;
+let myChar=null;
+let histgramme=null;
+let generationThAnnuel=[];
+let generationElAnnuel=[];
 let geocoder;
 const animatedComponents = makeAnimated();
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
@@ -49,6 +68,12 @@ function loadAsyncScript(src) {
 export const ghir = createContext();
 
 function App(props) {
+
+  let navigate = useNavigate();
+  const routeChange = () => {
+    let path = `/simulation`;
+    navigate(path);
+  };
   const [state, setState] = useState({
     persons: [],
   });
@@ -90,6 +115,7 @@ function App(props) {
   const [inputFac, setInputFac] = useState("");
   const [energieElectrique, setEnergieelecrtique] = useState(0);
   const [tube, setTube] = useState("");
+  const [typ,setTyp]=useState('')
   const [inputCons, setInputCons] = useState("");
   const [espace, sertEspace] = useState("");
   const [tempFluid, setTempFluid] = useState();
@@ -214,6 +240,100 @@ function App(props) {
   };
   const geocodeJson = "https://maps.googleapis.com/maps/api/js";
 
+useEffect(()=>{
+
+if (histgramme != null){
+
+
+    histgramme.destroy();
+  }
+  const labels = [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "May",
+    "Juin",
+    "Juillet",
+    "Août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "decembre",
+  ];
+  histgramme = new ChartJS(document.getElementById("histogramme"), {
+    data: {
+      labels: labels,
+
+      datasets: [
+        {
+          type: "bar",
+          label: "Génértion thermique mensuelle en  kwh/m²",
+
+          data: generationThAnnuel,
+
+          backgroundColor: "#00BFFF",
+
+          borderColor: "#047baa",
+
+          borderWidth: 1,
+          yAxisID: "y",
+        },
+         
+      ],
+    }})
+
+})
+useEffect(()=>{
+  if (myChar != null) {
+    myChar.destroy();
+  } 
+   
+  const labels = [
+    "Janvier",
+    "Fevrier",
+    "Mars",
+    "Avril",
+    "May",
+    "Juin",
+    "Juillet",
+    "Août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "decembre",
+  ];
+ 
+   
+ 
+ 
+  myChar = new ChartJS(document.getElementById("myChar"), {
+    data: {
+      labels: labels,
+
+      datasets: [
+        {
+          type: "bar",
+          label: "Génértion electrique mensuelle en  kwh/m²",
+
+          data: generationElAnnuel,
+
+          backgroundColor: "#00BFFF",
+
+          borderColor: "#047baa",
+
+          borderWidth: 1,
+          yAxisID: "y",
+        },
+         
+      ],
+    }})
+    
+
+ 
+})
+
+
   const maybeInputFac = (e) => {
     if (isNaN(e)) {
       let element = document.getElementById("alert");
@@ -241,10 +361,16 @@ function App(props) {
     setDni: setDni,
     setGhi: setGhi,
   };
-  console.log(sGHI.ghi, sGHI.dni, sGHI.tdni);
+
+ 
+    
+
   const handleChange = (event, newValue) => {
     setTempFluid(newValue);
   };
+
+
+
   let chekb = document.getElementById("sunoysterchoisis16");
   let chek = document.getElementById("sunoysterchoisis8");
   let che = document.getElementById("ck1c");
@@ -259,6 +385,7 @@ function App(props) {
       chek.style.display = "none";
     }
   };
+  const pvPlus=document.getElementById('flexSwitchCheckChecked')
 
   const handleNbrUnite = (e) => {
     let v = document.getElementById("baz");
@@ -287,36 +414,121 @@ function App(props) {
   };
   const handleSelect=(e)=>{
 
-   if(e.target.value==="2th" && ch.checked){
+   if(e.target.value==="2th" && ch.checked ){
+     setTyp(e.target.value)
+     
+    let i=0;
+    for( i=0;i<12;i++){
+ 
+
+  generationElAnnuel[i]=sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))
+  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
+ 
+
+    
+
+    }
+
+    
 
     setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
     setEnergiethermique(sGHI.dni*15*0.28*1.62)
    }
    if(e.target.value==="2th" && che.checked){
+    setTyp(e.target.value)
+    
+    let i=0;
+    for( i=0;i<12;i++){
+ 
 
+  generationElAnnuel[i]=sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))*0.44
+  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
+ 
+
+    
+
+    }
     setEnergieelecrtique((sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44)
     setEnergiethermique(sGHI.dni*15*0.28*1.62*0.44)
    }
-   if(e.target.value==="2tt" && ch.checked){
+   if(e.target.value==="2th" && ch.checked && pvPlus.checked){
+    setTyp(e.target.value)
+
+    setEnergieelecrtique(((sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44)+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
+    setEnergiethermique(sGHI.dni*15*0.28*1.62*0.44)
+   }
+    if(e.target.value==="2tt" && ch.checked){
+      setTyp(e.target.value)
+      let i=0;
+      for( i=0;i<12;i++){
+   
+  
+    generationElAnnuel[i]=0
+    generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
+   
+  
+      
+  
+      }
+  
+     
+      
+      setEnergiethermique(sGHI.dni*15*0.75)
+      setEnergieelecrtique(0)
+    }
+   if(e.target.value==="2tt" && che.checked){
+    setTyp(e.target.value)
+    let i=0;
+    for( i=0;i<12;i++){
+ 
+
+  generationElAnnuel[i]=0
+  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62*0.44
+ 
 
     
-    setEnergiethermique(sGHI.dni*15*0.28*1.62)
-    setEnergieelecrtique(0)
-   }
-   if(e.target.value==="2tt" && che.checked){
 
-    setEnergiethermique((sGHI.dni*15*0.28*1.62)*0.44)
+    }
+
+
+    setEnergiethermique((sGHI.dni*15*0.75)*0.44)
     setEnergieelecrtique(0)
    }
    if(e.target.value==="1e1t" && ch.checked){
-     let tubethermique=(sGHI.dni*15*0.75)/2
+    setTyp(e.target.value)
+
+    let i=0;
+    for( i=0;i<12;i++){
+ 
+
+  generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
+  generationThAnnuel[i]=(sGHI.tdni[i]*15*0.28*1.62)/2
+ 
+
+    
+
+    }
+
+     let tubethermique=(sGHI.dni*15*0.28*1.62)/2
      let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
 
     setEnergieelecrtique(tubeElectrique)
     setEnergiethermique(tubethermique)
    }
    if(e.target.value==="1e1t" && che.checked){
-    let tubethermique=(sGHI.dni*15*0.75)*0.44/2
+    setTyp(e.target.value)
+    let i=0;
+    for( i=0;i<12;i++){
+ 
+
+  generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44/2
+  generationThAnnuel[i]=(sGHI.tdni[i]*15*0.28*1.62)*0.44/2
+ 
+
+    
+
+    }
+    let tubethermique=(sGHI.dni*15*0.28*1.62)*0.44/2
     let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44/2
 
    setEnergieelecrtique(tubeElectrique)
@@ -327,6 +539,92 @@ function App(props) {
 
 
   }
+ 
+
+  console.log(generationElAnnuel)
+  const handlePvPlus=(e)=>{
+    if(pvPlus.checked && typ==="2th" && ch.checked){
+      const outputEnergieElectrique=sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25)))
+      
+      setEnergieelecrtique(outputEnergieElectrique+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
+      let i=0;
+      
+      for( i=0;i<12;i++){
+        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))+(12*1.2*1.14*((1.5*0.2*sGHI.tghi[i])))
+   
+   
+  
+   
+  
+      
+  
+      }
+      console.log(generationElAnnuel)
+    
+     }
+     if(pvPlus.checked===false && typ==="2th" && ch.checked){
+      setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
+      let i=0;
+      for( i=0;i<12;i++){
+        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))) 
+   
+   
+  
+   
+  
+      
+  
+      }
+    
+
+
+     }
+      
+      
+     if(pvPlus.checked && typ==="1e1t" && ch.checked){
+      let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
+        
+      
+      setEnergieelecrtique(tubeElectrique+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
+      let i=0;
+      for( i=0;i<12;i++){
+        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))+(12*1.2*1.14*(1.5*0.2*sGHI.tghi[i]))
+   
+   
+  
+   
+  
+      
+  
+      }
+    
+     }
+     if(pvPlus.checked===false && typ==="1e1t" && ch.checked){
+      let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
+
+      let i=0;
+      for( i=0;i<12;i++){
+        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))
+   
+   
+  
+   
+  
+      
+  
+      }
+        
+      
+      setEnergieelecrtique(tubeElectrique)
+    
+     }
+
+
+
+
+   
+  }
+  
 
   
   console.log(energieElectrique);
@@ -359,7 +657,7 @@ function App(props) {
               className="accordion-collapse collapse show"
               aria-labelledby="panelsStayOpen-headingOne"
             >
-              <div className="accordion-body sizing">
+              <div className="accordion-body ">
                 <Wrapper apiKey={apiKey} region="ma" render={render}>
                   <MyMapComponent ghi={ghi} updateGhi={setGhi} />
                 </Wrapper>
@@ -499,8 +797,10 @@ function App(props) {
                           onChange={handlChan}
                         />
                         <label class="custom-control-label" for="ck1c">
-                          <img src={cs} alt="#" class="img-fluid" />
+                          <img src={cs} alt="#" class="img-fluid" id="height" />
+                         
                         </label>
+                        <p id="typeModele"><strong>Sunoyster 8</strong></p>
                       </div>
                     </div>
                     <div class="col-md-3">
@@ -515,13 +815,14 @@ function App(props) {
                         <label class="custom-control-label" for="ck1d">
                           <img src={log} alt="#" class="img-fluid" />
                         </label>
+                        <p id="typeModele"><strong>Sunoyster 16</strong></p>
                       </div>
                     </div>
                   </div>
                   <div className="row content">
                     <div className="col-sm" id="ty">
                       <p>
-                        <strong>Température du fluide</strong>
+                        <strong>Température du fluide en (C°)</strong>
                       </p>
                     </div>
                     <div className="col-sm">
@@ -542,7 +843,7 @@ function App(props) {
                   <div className="row " id="pvp">
                     <div className="col-sm" id="ty">
                       <p>
-                        <strong>Nombre d'unités </strong>
+                        <strong>Nombre d'unités (kits) </strong>
                       </p>
                     </div>
                     <div className="col-sm">
@@ -552,7 +853,7 @@ function App(props) {
                         value={nbrunite}
                         onChange={handleNbrUnite}
                         max={20}
-                        placeholder="inserer un nombnre entre 1 et 20 unite "
+                        placeholder="inserer un nombre entre 1 et 20 unite "
                       ></input>
                       <div class="alert alert-danger" id="baz" role="alert">
                         nombre d'unite &le; 20
@@ -577,19 +878,20 @@ function App(props) {
                         onChange={handleSelect}
                         
                       >
-                        <option selected>Choisissez votre modèle ...</option>
-                        <option value="2th">2 tubes hybrides</option>
-                        <option value="2tt">2 tubes thermiques</option>
-                        <option value="1e1t">
+                        <option id="type" selected>Choisissez votre modèle ...</option>
+                        <option value="2th" title="generation d'energie electrique et thermique simiulatement ">2 tubes hybrides</option>
+                        <option value="2tt" title="generation d'energie thermique unique ">2 tubes thermiques</option>
+                        <option value="1e1t" title="generation d'energie electrique et thermique simiulatement ">
                           1 tube thermique et 1 tube electrique
                         </option>
                       </select>
-                      <Tooltip title="Ajouter le PV PLUS">
+                      <Tooltip title="Ajouter des panneaux solaires PV PLUS">
                         <div class="form-check form-switch" id="pvcheck">
                           <input
                             class="form-check-input"
                             type="checkbox"
                             id="flexSwitchCheckChecked"
+                            onChange={handlePvPlus}
                             unchecked
                           />
                           <label
@@ -671,6 +973,22 @@ function App(props) {
                     <strong>Sunoyster 8</strong>
                   </p>
                 </div>
+<div className="row">
+
+
+
+<div className="col-sm">
+
+<canvas id="myChar"  ></canvas>
+</div>
+<div className="col-sm">
+<canvas id="histogramme"  ></canvas>
+
+ 
+</div>
+
+</div>
+
                 <div className="row">
                   <table class="table table-striped table-dark">
                     <thead>
@@ -755,7 +1073,7 @@ function App(props) {
           <button
             type="button"
             id="button"
-            class="btn btn-primary btn-lg btn-block"
+            class="btn btn-primary btn-lg btn-block" onClick={routeChange}
           >
             {" "}
             Calculer l'autonomie
