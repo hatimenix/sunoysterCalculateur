@@ -14,6 +14,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#image11{
+
+ display: none;
+ margin-left: 300px;
+  width: 250px;
+  height: 155px;
+  margin-bottom: 50px;
+}
+.chart{
+
+  margin-top: 20px;
+}
+#titree{
+
+
+  margin-left: 70px;
+  margin-top: 10px;
+}
+#image22{
+
+  display: none;
+  margin-left: 300px;
+   width: 250px;
+   height: 155px;
+   margin-bottom: 50px;
+}
+#image11{
+
+ display: none;
+ margin-left: 300px;
+  width: 250px;
+  height: 155px;
+  margin-bottom: 50px;
+}
 #myChart{
 
   height: 200px;
@@ -56,6 +91,12 @@ margin-top: 90px;
 th, td{
   border: 1px solid black;
   padding: 10px;
+}
+ 
+#titre{
+margin-right: 100px;
+font-family: 'Times New Roman', Times, serif;
+ 
 }
 .haut{
   display: flex;
@@ -222,69 +263,10 @@ th, td{
 
     .hau{
       display: flex;
-      margin-left: 0px;
+      margin-left: 100px;
       
 
     }
 
   }
  
-
-@media screen and (max-width:600px){
-  .App{
-
-    width: 400px;
-  }
-  #txt{
-    display: none;
-  }
-   
-
-
-.imgsize1{
-
-  height: 100px;
-}
-  .haut{
-
-    margin-left: 0px;
-  }
-  .line{
-     margin-left: 0;
-     
-  }
-  .accordion-button{
-    width:350px;
-    margin-left: 0;
-      
-  }
-  .accordion-body{
-    width:350px;
-    margin-left: 0;
-
-  }
-  .accordion-header{
-    width:350px;
-    margin-left: 0;
-
-  }
-  .accordion-item{
-    width:350px;
-      margin-left: 0;
-  }
-  .ctd{
-
-     width: auto;
-     height: 100%;
-    margin-left: 20px;
-
-  }
- 
-
-  .accordion{
-    
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-}

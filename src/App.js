@@ -1,9 +1,9 @@
 import "./App.css";
 
 import Title from "./components/Title";
-
+import { createSlice } from "@reduxjs/toolkit";
 import React, { useRef, useEffect, useState, createContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import MyMapComponent from "./MyMapComponent.js";
 import cs from "./sunoyster_8.png";
 import context from "./context";
@@ -35,12 +35,11 @@ import { green } from "@mui/material/colors";
 let tabEnergieElectrique;
 let tabEnergieThermique;
 
-
 let isSelect = false;
-let myChar=null;
-let histgramme=null;
-let generationThAnnuel=[];
-let generationElAnnuel=[];
+let myChar = null;
+let histgramme = null;
+let generationThAnnuel = [];
+let generationElAnnuel = [];
 let geocoder;
 const animatedComponents = makeAnimated();
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
@@ -68,7 +67,6 @@ function loadAsyncScript(src) {
 export const ghir = createContext();
 
 function App(props) {
-
   let navigate = useNavigate();
   const routeChange = () => {
     let path = `/simulation`;
@@ -81,8 +79,14 @@ function App(props) {
   const [nbrunite, setNbrunite] = useState(0);
   const [esp, setEsp] = useState(0);
   const [dni, setDni] = useState();
-  const [energieThermique,setEnergiethermique]=useState(0)
+  const [energieThermique, setEnergiethermique] = useState(0);
   const [tmpfluid, setTmpfluid] = useState();
+  const [stockageElec, setStockageElec] = useState();
+
+  const [stockageTher, setStockageTher] = useState();
+
+  const [sunoyster8, setSunoyster8] = useState(false);
+  const [sunoyster16, setSunoyster16] = useState(false);
   const [tghi, setTghi] = useState([
     128,
     149,
@@ -111,26 +115,19 @@ function App(props) {
     155,
     197,
   ]);
+  console.log(nbrunite);
 
   const [inputFac, setInputFac] = useState("");
   const [energieElectrique, setEnergieelecrtique] = useState(0);
   const [tube, setTube] = useState("");
-  const [typ,setTyp]=useState('')
-  const [inputCons, setInputCons] = useState("");
-  const [espace, sertEspace] = useState("");
+  const [typ, setTyp] = useState("");
+
   const [tempFluid, setTempFluid] = useState();
 
   const [addrtype, setAddrtype] = useState(["Mazout", "Fioul", "Propane"]);
   const [consType, setConstType] = useState("");
   const [factTherm, setfactTherm] = useState("");
   const [consTherm, setConsTherm] = useState("");
-  const [slid, setSlid] = useState(122);
-  var slider = useRef();
-  var output = useRef();
-  const [inits, setInits] = useState("");
-  const [tubetype, setTubetype] = useState("");
-
-  const ref = React.useRef(null);
 
   const validate = (e) => {
     let al = document.getElementById("alrt");
@@ -152,7 +149,12 @@ function App(props) {
   const render = (Status) => {
     return <h1>{Status}</h1>;
   };
+  const validatee = (e) => {
 
+console.log(e)
+
+
+  };
   function updateTextInput(val) {
     document.getElementById("textInput").value = val;
   }
@@ -240,99 +242,88 @@ function App(props) {
   };
   const geocodeJson = "https://maps.googleapis.com/maps/api/js";
 
-useEffect(()=>{
+  useEffect(() => {
+    if (histgramme != null) {
+      histgramme.destroy();
+    }
+    const labels = [
+      "Janvier",
+      "Fevrier",
+      "Mars",
+      "Avril",
+      "May",
+      "Juin",
+      "Juillet",
+      "Août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "decembre",
+    ];
+    histgramme = new ChartJS(document.getElementById("histogramme"), {
+      data: {
+        labels: labels,
 
-if (histgramme != null){
+        datasets: [
+          {
+            type: "bar",
+            label: "Génértion thermique mensuelle en  kwh/m²",
 
+            data: generationThAnnuel,
 
-    histgramme.destroy();
-  }
-  const labels = [
-    "Janvier",
-    "Fevrier",
-    "Mars",
-    "Avril",
-    "May",
-    "Juin",
-    "Juillet",
-    "Août",
-    "septembre",
-    "octobre",
-    "novembre",
-    "decembre",
-  ];
-  histgramme = new ChartJS(document.getElementById("histogramme"), {
-    data: {
-      labels: labels,
+            backgroundColor: "#00BFFF",
 
-      datasets: [
-        {
-          type: "bar",
-          label: "Génértion thermique mensuelle en  kwh/m²",
+            borderColor: "#047baa",
 
-          data: generationThAnnuel,
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+        ],
+      },
+    });
+  });
+  useEffect(() => {
+    if (myChar != null) {
+      myChar.destroy();
+    }
 
-          backgroundColor: "#00BFFF",
+    const labels = [
+      "Janvier",
+      "Fevrier",
+      "Mars",
+      "Avril",
+      "May",
+      "Juin",
+      "Juillet",
+      "Août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "decembre",
+    ];
 
-          borderColor: "#047baa",
+    myChar = new ChartJS(document.getElementById("myChar"), {
+      data: {
+        labels: labels,
 
-          borderWidth: 1,
-          yAxisID: "y",
-        },
-         
-      ],
-    }})
+        datasets: [
+          {
+            type: "bar",
+            label: "Génértion electrique mensuelle en  kwh/m²",
 
-})
-useEffect(()=>{
-  if (myChar != null) {
-    myChar.destroy();
-  } 
-   
-  const labels = [
-    "Janvier",
-    "Fevrier",
-    "Mars",
-    "Avril",
-    "May",
-    "Juin",
-    "Juillet",
-    "Août",
-    "septembre",
-    "octobre",
-    "novembre",
-    "decembre",
-  ];
- 
-   
- 
- 
-  myChar = new ChartJS(document.getElementById("myChar"), {
-    data: {
-      labels: labels,
+            data: generationElAnnuel,
 
-      datasets: [
-        {
-          type: "bar",
-          label: "Génértion electrique mensuelle en  kwh/m²",
+            backgroundColor: "#00BFFF",
 
-          data: generationElAnnuel,
+            borderColor: "#047baa",
 
-          backgroundColor: "#00BFFF",
-
-          borderColor: "#047baa",
-
-          borderWidth: 1,
-          yAxisID: "y",
-        },
-         
-      ],
-    }})
-    
-
- 
-})
-
+            borderWidth: 1,
+            yAxisID: "y",
+          },
+        ],
+      },
+    });
+  });
 
   const maybeInputFac = (e) => {
     if (isNaN(e)) {
@@ -351,6 +342,7 @@ useEffect(()=>{
   ];
 
   const MyComponent = () => <Select options={options} />;
+
   const sGHI = {
     ghi: ghi,
     dni: dni,
@@ -362,14 +354,9 @@ useEffect(()=>{
     setGhi: setGhi,
   };
 
- 
-    
-
   const handleChange = (event, newValue) => {
     setTempFluid(newValue);
   };
-
-
 
   let chekb = document.getElementById("sunoysterchoisis16");
   let chek = document.getElementById("sunoysterchoisis8");
@@ -378,6 +365,8 @@ useEffect(()=>{
   const handlChan = (e) => {
     if (e.target.checked) {
       ch.checked = false;
+      setSunoyster16(false);
+      setSunoyster8(true);
 
       chek.style.display = "block";
       chekb.style.display = "none";
@@ -385,26 +374,38 @@ useEffect(()=>{
       chek.style.display = "none";
     }
   };
-  const pvPlus=document.getElementById('flexSwitchCheckChecked')
+  const pvPlus = document.getElementById("flexSwitchCheckChecked");
 
   const handleNbrUnite = (e) => {
     let v = document.getElementById("baz");
-    if (e.target.value > 20) {
+    let vv = document.getElementById("nbrunitee");
+    console.log(vv.value);
+    if (e.target.value > 20 || e.target.value === 0) {
       v.style.display = "block";
+      setNbrunite();
     } else {
       v.style.display = "none";
       setNbrunite(e.target.value);
       if (che.checked) {
         setEsp(e.target.value * 25);
+
+        setEnergieelecrtique(energieElectrique * e.target.value);
+        setEnergiethermique(energieThermique * e.target.value);
       }
       if (ch.checked) {
         setEsp(e.target.value * 56);
+
+        setEnergieelecrtique(energieElectrique * e.target.value);
+        setEnergiethermique(energieThermique * e.target.value);
       }
     }
   };
   const handleChang = (e) => {
     if (e.target.checked) {
       che.checked = false;
+      setSunoyster16(true);
+      setSunoyster8(false);
+
       chekb.style.display = "block";
       chek.style.display = "none";
       console.log(chekb.style.display);
@@ -412,221 +413,201 @@ useEffect(()=>{
       chekb.style.display = "none";
     }
   };
-  const handleSelect=(e)=>{
+  const handleSelect = (e) => {
+    if (e.target.value === "2th" && ch.checked) {
+      setTyp(e.target.value);
 
-   if(e.target.value==="2th" && ch.checked ){
-     setTyp(e.target.value)
-     
-    let i=0;
-    for( i=0;i<12;i++){
- 
-
-  generationElAnnuel[i]=sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))
-  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
- 
-
-    
-
-    }
-
-    
-
-    setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
-    setEnergiethermique(sGHI.dni*15*0.28*1.62)
-   }
-   if(e.target.value==="2th" && che.checked){
-    setTyp(e.target.value)
-    
-    let i=0;
-    for( i=0;i<12;i++){
- 
-
-  generationElAnnuel[i]=sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))*0.44
-  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
- 
-
-    
-
-    }
-    setEnergieelecrtique((sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44)
-    setEnergiethermique(sGHI.dni*15*0.28*1.62*0.44)
-   }
-   if(e.target.value==="2th" && ch.checked && pvPlus.checked){
-    setTyp(e.target.value)
-
-    setEnergieelecrtique(((sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44)+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
-    setEnergiethermique(sGHI.dni*15*0.28*1.62*0.44)
-   }
-    if(e.target.value==="2tt" && ch.checked){
-      setTyp(e.target.value)
-      let i=0;
-      for( i=0;i<12;i++){
-   
-  
-    generationElAnnuel[i]=0
-    generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62
-   
-  
-      
-  
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25));
+        generationThAnnuel[i] = sGHI.tdni[i] * 15 * 0.28 * 1.62;
       }
-  
-     
-      
-      setEnergiethermique(sGHI.dni*15*0.75)
-      setEnergieelecrtique(0)
+
+      setEnergieelecrtique(
+        sGHI.dni * nbrunite*
+          15 *
+          0.9 *
+          0.75 *
+          (0.42 - 0.00055 * (tmpfluid - 25) )
+      );
+      setEnergiethermique(sGHI.dni * 15 * 0.28 * 1.62 * nbrunite);
     }
-   if(e.target.value==="2tt" && che.checked){
-    setTyp(e.target.value)
-    let i=0;
-    for( i=0;i<12;i++){
- 
+    if (e.target.value === "2th" && che.checked) {
+      setTyp(e.target.value);
 
-  generationElAnnuel[i]=0
-  generationThAnnuel[i]=sGHI.tdni[i]*15*0.28*1.62*0.44
- 
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] *
+          15 *
+          0.9 *
+          0.75 *
+          (0.42 - 0.00055 * (tmpfluid - 25)) *
+          0.44;
+        generationThAnnuel[i] = sGHI.tdni[i] * 15 * 0.28 * 1.62;
+      }
+      setEnergieelecrtique(
+        sGHI.dni *
+          15 *
+          0.9 *
+          0.75 *
+          (0.42 - 0.00055 * (tmpfluid - 25)) *
+          0.44 *
+          nbrunite
+      );
+      setEnergiethermique(sGHI.dni * 15 * 0.28 * 1.62 * 0.44 * nbrunite);
+    }
+    if (e.target.value === "2th" && ch.checked && pvPlus.checked) {
+      setTyp(e.target.value);
 
-    
+      setEnergieelecrtique(
+        sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25)) * 0.44 +
+          12 * 1.2 * 1.14 * (1.5 * 0.2 * sGHI.ghi) * nbrunite
+      );
+      setEnergiethermique(sGHI.dni * 15 * 0.28 * 1.62 * 0.44 * nbrunite);
+    }
+    if (e.target.value === "2tt" && ch.checked) {
+      setTyp(e.target.value);
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] = 0;
+        generationThAnnuel[i] = sGHI.tdni[i] * 15 * 0.28 * 1.62;
+      }
 
+      setEnergiethermique(sGHI.dni * 15 * 0.75 * nbrunite);
+      setEnergieelecrtique(0);
+    }
+    if (e.target.value === "2tt" && che.checked) {
+      setTyp(e.target.value);
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] = 0;
+        generationThAnnuel[i] = sGHI.tdni[i] * 15 * 0.28 * 1.62 * 0.44;
+      }
+
+      setEnergiethermique(sGHI.dni * 15 * 0.75 * 0.44 * nbrunite);
+      setEnergieelecrtique(0);
+    }
+    if (e.target.value === "1e1t" && ch.checked) {
+      setTyp(e.target.value);
+
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          (sGHI.tdni[i] *
+            15 *
+            0.9 *
+            0.75 *
+            (0.42 - 0.00055 * (tmpfluid - 25))) /
+          2;
+        generationThAnnuel[i] = (sGHI.tdni[i] * 15 * 0.28 * 1.62) / 2;
+      }
+
+      let tubethermique = (sGHI.dni * 15 * 0.28 * 1.62) / 2;
+      let tubeElectrique =
+        (sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25))) / 2;
+
+      setEnergieelecrtique(tubeElectrique * nbrunite);
+      setEnergiethermique(tubethermique * nbrunite);
+    }
+    if (e.target.value === "1e1t" && che.checked) {
+      setTyp(e.target.value);
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          (sGHI.tdni[i] *
+            15 *
+            0.9 *
+            0.75 *
+            (0.42 - 0.00055 * (tmpfluid - 25)) *
+            0.44) /
+          2;
+        generationThAnnuel[i] = (sGHI.tdni[i] * 15 * 0.28 * 1.62 * 0.44) / 2;
+      }
+      let tubethermique = (sGHI.dni * 15 * 0.28 * 1.62 * 0.44) / 2;
+      let tubeElectrique =
+        (sGHI.dni *
+          15 *
+          0.9 *
+          0.75 *
+          (0.42 - 0.00055 * (tmpfluid - 25)) *
+          0.44) /
+        2;
+
+      setEnergieelecrtique(tubeElectrique * nbrunite);
+      setEnergiethermique(tubethermique * nbrunite);
+    }
+  };
+
+  const store = {
+    consoThermique: consTherm,
+    generationElec: energieElectrique,
+    generationTher: energieThermique,
+    consoElectriqu: inputFac / 0.89,
+    sunoyster_8: sunoyster8,
+    sunoyster16: sunoyster16,
+    stockageElectrique: stockageElec,
+    stockagethermique: stockageTher,
+  };
+
+  console.log(generationElAnnuel);
+  const handlePvPlus = (e) => {
+    if (pvPlus.checked && typ === "2th" && ch.checked) {
+      const outputEnergieElectrique =
+        sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25));
+
+      setEnergieelecrtique(
+        outputEnergieElectrique + 12 * 1.2 * 1.14 * (1.5 * 0.2 * sGHI.ghi)
+      );
+      let i = 0;
+
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25)) +
+          12 * 1.2 * 1.14 * (1.5 * 0.2 * sGHI.tghi[i]);
+      }
+      console.log(generationElAnnuel);
+    }
+    if (pvPlus.checked === false && typ === "2th" && ch.checked) {
+      setEnergieelecrtique(
+        sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25))
+      );
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25));
+      }
     }
 
+    if (pvPlus.checked && typ === "1e1t" && ch.checked) {
+      let tubeElectrique =
+        (sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25))) / 2;
 
-    setEnergiethermique((sGHI.dni*15*0.75)*0.44)
-    setEnergieelecrtique(0)
-   }
-   if(e.target.value==="1e1t" && ch.checked){
-    setTyp(e.target.value)
-
-    let i=0;
-    for( i=0;i<12;i++){
- 
-
-  generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
-  generationThAnnuel[i]=(sGHI.tdni[i]*15*0.28*1.62)/2
- 
-
-    
-
+      setEnergieelecrtique(
+        tubeElectrique + 12 * 1.2 * 1.14 * (1.5 * 0.2 * sGHI.ghi)
+      );
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25)) +
+          12 * 1.2 * 1.14 * (1.5 * 0.2 * sGHI.tghi[i]);
+      }
     }
+    if (pvPlus.checked === false && typ === "1e1t" && ch.checked) {
+      let tubeElectrique =
+        (sGHI.dni * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25))) / 2;
 
-     let tubethermique=(sGHI.dni*15*0.28*1.62)/2
-     let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
+      let i = 0;
+      for (i = 0; i < 12; i++) {
+        generationElAnnuel[i] =
+          sGHI.tdni[i] * 15 * 0.9 * 0.75 * (0.42 - 0.00055 * (tmpfluid - 25));
+      }
 
-    setEnergieelecrtique(tubeElectrique)
-    setEnergiethermique(tubethermique)
-   }
-   if(e.target.value==="1e1t" && che.checked){
-    setTyp(e.target.value)
-    let i=0;
-    for( i=0;i<12;i++){
- 
-
-  generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44/2
-  generationThAnnuel[i]=(sGHI.tdni[i]*15*0.28*1.62)*0.44/2
- 
-
-    
-
+      setEnergieelecrtique(tubeElectrique);
     }
-    let tubethermique=(sGHI.dni*15*0.28*1.62)*0.44/2
-    let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))*0.44/2
+  };
 
-   setEnergieelecrtique(tubeElectrique)
-   setEnergiethermique(tubethermique)
-  }
-
-   
-
-
-  }
- 
-
-  console.log(generationElAnnuel)
-  const handlePvPlus=(e)=>{
-    if(pvPlus.checked && typ==="2th" && ch.checked){
-      const outputEnergieElectrique=sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25)))
-      
-      setEnergieelecrtique(outputEnergieElectrique+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
-      let i=0;
-      
-      for( i=0;i<12;i++){
-        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))+(12*1.2*1.14*((1.5*0.2*sGHI.tghi[i])))
-   
-   
-  
-   
-  
-      
-  
-      }
-      console.log(generationElAnnuel)
-    
-     }
-     if(pvPlus.checked===false && typ==="2th" && ch.checked){
-      setEnergieelecrtique(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))
-      let i=0;
-      for( i=0;i<12;i++){
-        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25))))) 
-   
-   
-  
-   
-  
-      
-  
-      }
-    
-
-
-     }
-      
-      
-     if(pvPlus.checked && typ==="1e1t" && ch.checked){
-      let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
-        
-      
-      setEnergieelecrtique(tubeElectrique+(12*1.2*1.14*((1.5*0.2*sGHI.ghi))))
-      let i=0;
-      for( i=0;i<12;i++){
-        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))+(12*1.2*1.14*(1.5*0.2*sGHI.tghi[i]))
-   
-   
-  
-   
-  
-      
-  
-      }
-    
-     }
-     if(pvPlus.checked===false && typ==="1e1t" && ch.checked){
-      let tubeElectrique=(sGHI.dni*15*0.9*0.75*((0.42-0.00055*(tmpfluid-25))))/2
-
-      let i=0;
-      for( i=0;i<12;i++){
-        generationElAnnuel[i]=(sGHI.tdni[i]*15*0.9*0.75*((0.42-0.00055*((tmpfluid-25)))))
-   
-   
-  
-   
-  
-      
-  
-      }
-        
-      
-      setEnergieelecrtique(tubeElectrique)
-    
-     }
-
-
-
-
-   
-  }
-  
-
-  
   console.log(energieElectrique);
 
   return (
@@ -697,6 +678,7 @@ useEffect(()=>{
                         value={Math.round(inputFac)}
                         className="form-control"
                         onChange={(e) => setInputFac(e.target.value)}
+                        required
                       />
                       <div class="alert alert-danger" id="alert" role="alert">
                         This is a danger alert—check it out!
@@ -713,6 +695,7 @@ useEffect(()=>{
                         placeholder="saisissez le montant annuelle en DH TTC"
                         value={Math.round(inputFac / 0.89)}
                         onChange={(e) => maybeInputFac(e.target.value)}
+                        required
                       />
                     </div>
                   </div>
@@ -755,6 +738,35 @@ useEffect(()=>{
                         className="form-control"
                         value={consTherm}
                         onChange={(e) => maybeConsTherm(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm" id="cor">
+                      Stockage electrique en KW/h
+                    </div>
+                    <div className="col-sm">
+                      <input
+                        className="form-control"
+                        value={stockageElec}
+                        onChange={(e) => {
+                          setStockageElec(e.target.value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm" id="cor">
+                      Stockage thermique en kwh
+                    </div>
+                    <div className="col-sm">
+                      <input
+                        className="form-control"
+                        value={stockageTher}
+                        onChange={(e) => {
+                          setStockageTher(e.target.value);
+                        }}
                       />
                     </div>
                   </div>
@@ -798,9 +810,10 @@ useEffect(()=>{
                         />
                         <label class="custom-control-label" for="ck1c">
                           <img src={cs} alt="#" class="img-fluid" id="height" />
-                         
                         </label>
-                        <p id="typeModele"><strong>Sunoyster 8</strong></p>
+                        <p id="typeModele">
+                          <strong>Sunoyster 8</strong>
+                        </p>
                       </div>
                     </div>
                     <div class="col-md-3">
@@ -815,7 +828,9 @@ useEffect(()=>{
                         <label class="custom-control-label" for="ck1d">
                           <img src={log} alt="#" class="img-fluid" />
                         </label>
-                        <p id="typeModele"><strong>Sunoyster 16</strong></p>
+                        <p id="typeModele">
+                          <strong>Sunoyster 16</strong>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -832,6 +847,7 @@ useEffect(()=>{
                         max={175}
                         placeholder="inserer une temperature entre 90 et 175 C°"
                         onChange={validate}
+                        required
                       ></input>
                       <div class="alert alert-danger" id="alrt" role="alert">
                         <p className="ajuster">
@@ -850,9 +866,11 @@ useEffect(()=>{
                       <input
                         className="form-control"
                         min={1}
+                        id="nbrunitee"
                         value={nbrunite}
                         onChange={handleNbrUnite}
                         max={20}
+                        required
                         placeholder="inserer un nombre entre 1 et 20 unite "
                       ></input>
                       <div class="alert alert-danger" id="baz" role="alert">
@@ -869,57 +887,73 @@ useEffect(()=>{
                       </p>{" "}
                     </div>
 
-                    <div className="col-sm" >
-                      <div id="pvp" >
-                      <select
-                        id="sze"
-                        class="form-select form-select-sm"
-                        aria-label=".form-select-sm example"
-                        onChange={handleSelect}
-                        
-                      >
-                        <option id="type" selected>Choisissez votre modèle ...</option>
-                        <option value="2th" title="generation d'energie electrique et thermique simiulatement ">2 tubes hybrides</option>
-                        <option value="2tt" title="generation d'energie thermique unique ">2 tubes thermiques</option>
-                        <option value="1e1t" title="generation d'energie electrique et thermique simiulatement ">
-                          1 tube thermique et 1 tube electrique
-                        </option>
-                      </select>
-                      <Tooltip title="Ajouter des panneaux solaires PV PLUS">
-                        <div class="form-check form-switch" id="pvcheck">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="flexSwitchCheckChecked"
-                            onChange={handlePvPlus}
-                            unchecked
-                          />
-                          <label
-                            class="form-check-label"
-                            for="flexSwitchCheckChecked"
+                    <div className="col-sm">
+                      <div id="pvp">
+                        <select
+                          id="sze"
+                          handleSelect
+                          class="form-select form-select-sm"
+                          aria-label=".form-select-sm example"
+                          onChange={handleSelect}
+                        >
+                          <option id="type" selected>
+                            Choisissez votre modèle ...
+                          </option>
+                          <option
+                            value="2th"
+                            title="generation d'energie electrique et thermique simiulatement "
                           >
-                            {" "}
-                            PV PLUS
-                          </label>
-                        </div>
-                      </Tooltip>
+                            2 tubes hybrides
+                          </option>
+                          <option
+                            value="2tt"
+                            title="generation d'energie thermique unique "
+                          >
+                            2 tubes thermiques
+                          </option>
+                          <option
+                            value="1e1t"
+                            title="generation d'energie electrique et thermique simiulatement "
+                          >
+                            1 tube thermique et 1 tube electrique
+                          </option>
+                        </select>
+                        <Tooltip title="Ajouter des panneaux solaires PV PLUS">
+                          <div class="form-check form-switch" id="pvcheck">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="flexSwitchCheckChecked"
+                              onChange={handlePvPlus}
+                              unchecked
+                            />
+                            <label
+                              class="form-check-label"
+                              for="flexSwitchCheckChecked"
+                            >
+                              {" "}
+                              PV PLUS
+                            </label>
+                          </div>
+                        </Tooltip>
                       </div>
                     </div>
                   </div>
-                 
-                  
-                  <div className="row" >
+
+                  <div className="row" id="flex">
                     <div className="col-sm-3" id="ty">
                       <strong>Espace occupée : {esp} m² </strong>
                     </div>
                     <div clasdsName="col-sm-3" id="ty">
                       <strong>
-                        energie electrique géneré : {parseInt(energieElectrique)} kwh/m²
+                        energie electrique géneré :{" "}
+                        {parseInt(energieElectrique)} kwh/m²
                       </strong>
                     </div>
                     <div clasdsName="col-sm-3" id="ty">
                       <strong>
-                        energie thermique géneré : {parseInt(energieThermique)} kwh/m²
+                        energie thermique géneré : {parseInt(energieThermique)}{" "}
+                        kwh/m²
                       </strong>
                     </div>
                   </div>
@@ -973,21 +1007,14 @@ useEffect(()=>{
                     <strong>Sunoyster 8</strong>
                   </p>
                 </div>
-<div className="row">
-
-
-
-<div className="col-sm">
-
-<canvas id="myChar"  ></canvas>
-</div>
-<div className="col-sm">
-<canvas id="histogramme"  ></canvas>
-
- 
-</div>
-
-</div>
+                <div className="row">
+                  <div className="col-sm">
+                    <canvas id="myChar"></canvas>
+                  </div>
+                  <div className="col-sm">
+                    <canvas id="histogramme"></canvas>
+                  </div>
+                </div>
 
                 <div className="row">
                   <table class="table table-striped table-dark">
@@ -1069,15 +1096,18 @@ useEffect(()=>{
             </div>
           </div>
         </div>
+
         <div className="container">
-          <button
+          <Link
             type="button"
             id="button"
-            class="btn btn-primary btn-lg btn-block" onClick={routeChange}
+            class="btn btn-primary btn-lg btn-block"
+            onClick={validatee}
+            to="/simulation"
+            state={store}
           >
-            {" "}
-            Calculer l'autonomie
-          </button>
+            calcul
+          </Link>
         </div>
       </div>
     </context.Provider>

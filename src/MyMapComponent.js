@@ -328,7 +328,7 @@ function MyMapComponent(props) {
 
             <div className="row">
               <div className="col-sm" id="tx">
-                Address
+                Addresse
               </div>
 
               <div className="col-sm">
