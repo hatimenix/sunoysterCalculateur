@@ -1,10 +1,14 @@
-import { React, useEffect } from "react";
+import { React, useEffect,useState ,useCallback} from "react";
 import { Provider } from "react-redux";
+import mf  from 'diagram-library';
+import { DiagramView,NodeListView } from "diagram-library-react";
 import log from "./download.jpg";
+import DiagramApp from "./diagram";
 
 import { produce } from "immer";
 
 import { useLocation } from "react-router-dom";
+import ReactFlow, { MiniMap, Controls,applyEdgeChanges, applyNodeChanges } from 'react-flow-renderer';
 import "./index.css";
 
 import * as go from "gojs";
@@ -15,24 +19,57 @@ import { ReactDiagram } from "gojs-react";
 import Chart from "react-apexcharts";
 import { useForkRef } from "@mui/material";
 
-function Simulation() {
+function Simulation({ nodes, edges,   onConnect }) {
+
+
+  const initialNodes = [
+    {
+      id: '1',
+      type: 'arrow',
+      data: { label: 'Input Node' },
+      position: { x: 250, y: 25 },
+    },
+  
+    {
+      id: '2',
+      // you can also pass a React component as a label
+      data: { label: <div>PV générer </div> },
+      position: { x: 100, y: 125 },
+    },
+    {
+      id: '3',
+      type: 'output',
+      data: { label: 'Output Node' },
+      position: { x: 250, y: 250 },
+    },
+  ];
+ 
+  const [node, setNode] = useState(initialNodes);
+ 
+
+  const onNodesChange = useCallback(
+    (changes) => setNode((nds) => applyNodeChanges(changes, nds)),
+    [setNode]
+  );
+ 
+
   const location = useLocation();
   console.log(location);
-  useEffect(()=>{
+  useEffect(() => {
     const sunoyster16 = document.getElementById("image11");
-  const sunoyster8 = document.getElementById("image22");
+    const sunoyster8 = document.getElementById("image22");
 
- if(location.state.sunoyster16===true){
+    if (location.state.sunoyster16 === true) {
+      sunoyster8.style.display = "block";
+    }
+    if (location.state.sunoyster_8 === true) {
+      sunoyster16.style.display = "block";
+    }
+  }, []);
 
-  sunoyster8.style.display="block"
- }
- if(location.state.sunoyster_8===true){
+   
 
-  sunoyster16.style.display="block"
- }
-  },[])
-
-  console.log()
+  console.log();
   console.log();
 
   // calcul et simulation
@@ -55,121 +92,128 @@ function Simulation() {
   var pvc_injection = location.state.generationElec - (pvc_charge + pvc_direct);
   //calcul en pourcentage
 
-  var pr_pvc_direct=parseFloat((pvc_direct*100)/location.state.generationElec)
-  var pr_pvc_charge=parseFloat((pvc_charge*100)/location.state.generationElec)
-  var pr_pvc_injected=parseFloat((pvc_injection*100)/location.state.generationElec)
-
+  var pr_pvc_direct = parseFloat(
+    (pvc_direct * 100) / location.state.generationElec
+  );
+  var pr_pvc_charge = parseFloat(
+    (pvc_charge * 100) / location.state.generationElec
+  );
+  var pr_pvc_injected = parseFloat(
+    (pvc_injection * 100) / location.state.generationElec
+  );
 
   //calcul du PV-AutoSuffisance et autoconsommation
 
+  var generationTh = location.state.generationTher;
+  var th_direct = generationTh * 0.7;
+  var th_decharge = location.state.stockagethermique * 0.05;
+  var th_autre = location.state.consoThermique - (th_decharge + th_direct);
 
-  var generationTh=location.state.generationTher
-  var th_direct = generationTh*0.7;
-  var th_decharge=location.state.stockagethermique*0.05
-  var th_autre = location.state.consoThermique-(th_decharge+th_direct)
-
-  var thc_charge=location.state.stockagethermique*0.1;
-  var thc_injection = location.state.generationTher-(thc_charge+th_direct)
+  var thc_charge = location.state.stockagethermique * 0.1;
+  var thc_injection = location.state.generationTher - (thc_charge + th_direct);
 
   //pourcentage de l'autosuffisance d'energie thermique
 
- 
-  var prth_direct = Math.round((th_direct*100)/location.state.consoThermique);
-  var prth_decharge=Math.round((th_decharge*100)/location.state.consoThermique)
-  var prth_autre=Math.round((th_autre*100)/location.state.consoThermique)
-   //pourcentage de l'autoconsommation d'energie thermique
+  var prth_direct = Math.round(
+    (th_direct * 100) / location.state.consoThermique
+  );
+  var prth_decharge = Math.round(
+    (th_decharge * 100) / location.state.consoThermique
+  );
+  var prth_autre = Math.round((th_autre * 100) / location.state.consoThermique);
+  //pourcentage de l'autoconsommation d'energie thermique
 
-   var prthc_direct=Math.round((th_direct*100)/location.state.generationTher)
-   var pr_thc_charge= Math.round((thc_charge*100)/location.state.generationTher)
-   var pr_thc_autres=Math.round((thc_injection*100/location.state.generationTher))
-
-
-
-
-
-
+  var prthc_direct = Math.round(
+    (th_direct * 100) / location.state.generationTher
+  );
+  var pr_thc_charge = Math.round(
+    (thc_charge * 100) / location.state.generationTher
+  );
+  var pr_thc_autres = Math.round(
+    (thc_injection * 100) / location.state.generationTher
+  );
 
   //configuration de chartjs
   const opti = {
-    series: [Math.round(prthc_direct), Math.round(pr_thc_charge), Math.round(pr_thc_autres)],
+    series: [
+      Math.round(prthc_direct),
+      Math.round(pr_thc_charge),
+      Math.round(pr_thc_autres),
+    ],
     labels: ["PV Direct", "PV Decharge", "PV Reseau"],
-    plotOptions : {
+    plotOptions: {
+      pie: {
+        expandOnClick: true,
+        donut: {
+          size: "60px",
 
-      pie : {
-
-
-        expandOnClick : true,
-        donut : {
-          size : "60px",
-
-          labels : {
-
-            show : true,
-            
-            
-          }
-        }
-      }
-    }
+          labels: {
+            show: true,
+          },
+        },
+      },
+    },
   };
 
-  const ser =  [Math.round(prthc_direct), Math.round(pr_thc_charge), Math.round(pr_thc_autres)];
+  const ser = [
+    Math.round(prthc_direct),
+    Math.round(pr_thc_charge),
+    Math.round(pr_thc_autres),
+  ];
   const optio = {
-    series: [Math.round(prth_autre), Math.round(prth_decharge), Math.round(prth_direct)],
+    series: [
+      Math.round(prth_autre),
+      Math.round(prth_decharge),
+      Math.round(prth_direct),
+    ],
     labels: ["PV Direct", "PV Decharge", "PV Reseau"],
-    plotOptions : {
+    plotOptions: {
+      pie: {
+        expandOnClick: true,
+        donut: {
+          size: "60px",
 
-      pie : {
-
-
-        expandOnClick : true,
-        donut : {
-          size : "60px",
-
-          labels : {
-
-            show : true,
-            total :{
-
-              show : true ,
-
-            }
-            
-          }
-        }
-      }
-    }
+          labels: {
+            show: true,
+            total: {
+              show: true,
+            },
+          },
+        },
+      },
+    },
   };
 
-  const seri = [Math.round(prth_autre), Math.round(prth_decharge), Math.round(prth_direct)];
+  const seri = [
+    Math.round(prth_autre),
+    Math.round(prth_decharge),
+    Math.round(prth_direct),
+  ];
   const options = {
     series: [parseInt(pr_decharge), parseInt(pr_pvd), parseInt(pr_reseau)],
     labels: ["PV Direct", "PV Decharge", "PV Reseau"],
-    plotOptions : {
+    plotOptions: {
+      pie: {
+        expandOnClick: true,
+        donut: {
+          size: "60px",
 
-      pie : {
-
-
-        expandOnClick : true,
-        donut : {
-          size : "60px",
-
-          labels : {
-
-            show : true,
-            total :{
-
-              show : true ,
-
-            }
-            
-          }
-        }
-      }
-    }
+          labels: {
+            show: true,
+            total: {
+              show: true,
+            },
+          },
+        },
+      },
+    },
   };
 
-  const series = [Math.round(pr_decharge), Math.round(pr_pvd), Math.round(pr_reseau)];
+  const series = [
+    Math.round(pr_decharge),
+    Math.round(pr_pvd),
+    Math.round(pr_reseau),
+  ];
   const option = {
     series: [pr_pvc_charge, pr_pvc_direct, pr_pvc_injected],
     labels: ["PV Direct", "PV Charge", "PV Injection"],
@@ -202,22 +246,25 @@ function Simulation() {
         id="collapseOne"
         className="collapse show"
         aria-labelledby="headingOne"
+      
+
         data-parent="#accordion"
       >
         <div className="card-body" id="bodys">
           <div className="SunoysterChoisis">
-            <div className="row" id="image11" style={{display :'none'}}>
+            <div className="row" id="image11" style={{ display: "none" }}>
               <img src={cs} alt="sunoyster"></img>
-              <p id="titree"><strong>Sunoster 16</strong></p> 
+              <p id="titree">
+                <strong>Sunoster 16</strong>
+              </p>
             </div>
 
-          
-            <div className="row" id="image22" style={{display :'none'}}>
+            <div className="row" id="image22" style={{ display: "none" }}>
               <img src={log} alt="sunoyster"></img>
-              <p id="titree"><strong>Sunoster 8</strong></p>
+              <p id="titree">
+                <strong>Sunoster 8</strong>
+              </p>
             </div>
-            
-           
           </div>
 
           <div className="contenus">
@@ -307,12 +354,12 @@ function Simulation() {
               </div>
             </div>
 
+         <div className="row"  >
+ 
 
 
-           
-
-            
-         
+ 
+         </div>
           </div>
         </div>
       </div>
