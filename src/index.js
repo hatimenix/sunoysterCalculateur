@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
+ 
 import Home from './Home';
 import App from "./App"
 import Simulation from './Simulation'
-import { store } from './redux'
+ 
 import { Provider } from 'react-redux'
  
 //
@@ -18,7 +18,7 @@ import { BrowserRouter,Route,Routes } from "react-router-dom";
 
 
     <BrowserRouter>
- 
+   
     
     <Routes>
     
@@ -29,7 +29,7 @@ import { BrowserRouter,Route,Routes } from "react-router-dom";
   
      
     </Routes>
-     
+   
     
   </BrowserRouter>
  

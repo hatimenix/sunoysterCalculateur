@@ -21,7 +21,7 @@ import {
   registerables as registerablesJS,
 } from "chart.js";
 
-import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+ 
 import log from "./download.jpg";
 
 import {
@@ -30,17 +30,14 @@ import {
   Spinner,
   ErrorComponent,
 } from "@googlemaps/react-wrapper";
-import { green } from "@mui/material/colors";
-
-let tabEnergieElectrique;
-let tabEnergieThermique;
+ 
 
 let isSelect = false;
 let myChar = null;
 let histgramme = null;
 let generationThAnnuel = [];
 let generationElAnnuel = [];
-let geocoder;
+ 
 const animatedComponents = makeAnimated();
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 
@@ -150,10 +147,7 @@ function App(props) {
     return <h1>{Status}</h1>;
   };
   const validatee = (e) => {
-
-console.log(e)
-
-
+    console.log(e);
   };
   function updateTextInput(val) {
     document.getElementById("textInput").value = val;
@@ -425,11 +419,12 @@ console.log(e)
       }
 
       setEnergieelecrtique(
-        sGHI.dni * nbrunite*
+        sGHI.dni *
+          nbrunite *
           15 *
           0.9 *
           0.75 *
-          (0.42 - 0.00055 * (tmpfluid - 25) )
+          (0.42 - 0.00055 * (tmpfluid - 25))
       );
       setEnergiethermique(sGHI.dni * 15 * 0.28 * 1.62 * nbrunite);
     }
@@ -549,6 +544,9 @@ console.log(e)
     sunoyster16: sunoyster16,
     stockageElectrique: stockageElec,
     stockagethermique: stockageTher,
+    tempFluid : tmpfluid,
+    nbrunite : nbrunite,
+    espace : esp,
   };
 
   console.log(generationElAnnuel);
@@ -609,6 +607,8 @@ console.log(e)
   };
 
   console.log(energieElectrique);
+
+  const InputFacture = document.getElementById('factureElectrique')
 
   return (
     <context.Provider value={sGHI}>
@@ -674,6 +674,7 @@ console.log(e)
                     <div className="col-sm">
                       <input
                         type="text"
+                        id="factureElectrique"
                         placeholder="saisissez le montant annuelle en DH TTC"
                         value={Math.round(inputFac)}
                         className="form-control"

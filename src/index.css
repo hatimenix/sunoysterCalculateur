@@ -14,6 +14,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.b{
+  display: flex;
+  flex-direction: row;
+}
 
 #image11{
 
@@ -23,9 +27,38 @@ code {
   height: 155px;
   margin-bottom: 50px;
 }
+#resultat{
+
+  margin-top: 100px;
+  display: flex;
+}
+ 
+#head{
+
+ margin-left: 300px;
+ margin-top: 50px;
+}
+.cadre{
+
+
+  border: "1px solid black";
+
+}
+#resize{
+
+  margin-top: 145px;
+}
 .chart{
 
   margin-top: 20px;
+}
+#confid{
+
+
+
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-around; 
 }
 #titree{
 
@@ -104,6 +137,16 @@ font-family: 'Times New Roman', Times, serif;
   margin-left: 300px;
   padding-top: 20px;
 
+}
+ 
+#imp{
+
+
+ 
+}
+#imprimer{
+
+  margin-left: 500px  ;
 }
 
 .hau{

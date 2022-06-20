@@ -1,57 +1,36 @@
-import { React, useEffect,useState ,useCallback} from "react";
-import { Provider } from "react-redux";
-import mf  from 'diagram-library';
-import { DiagramView,NodeListView } from "diagram-library-react";
+import { React, useEffect, useState, useCallback, useRef } from "react";
+
 import log from "./download.jpg";
-import DiagramApp from "./diagram";
 
-import { produce } from "immer";
-
+import { ArcherContainer, ArcherElement } from "react-archer";
+import { ReactToPrint, useReactToPrint } from "react-to-print";
 import { useLocation } from "react-router-dom";
-import ReactFlow, { MiniMap, Controls,applyEdgeChanges, applyNodeChanges } from 'react-flow-renderer';
+
 import "./index.css";
 
-import * as go from "gojs";
 import cs from "./sunoyster_8.png";
 
-import ghir from "./App";
-import { ReactDiagram } from "gojs-react";
 import Chart from "react-apexcharts";
-import { useForkRef } from "@mui/material";
 
-function Simulation({ nodes, edges,   onConnect }) {
+var modelee = "";
+var type = "";
 
+function Simulation() {
+  const [modele, setModele] = useState("");
+  const rootStyle = {
+    display: "inline-grid",
 
-  const initialNodes = [
-    {
-      id: '1',
-      type: 'arrow',
-      data: { label: 'Input Node' },
-      position: { x: 250, y: 25 },
-    },
-  
-    {
-      id: '2',
-      // you can also pass a React component as a label
-      data: { label: <div>PV générer </div> },
-      position: { x: 100, y: 125 },
-    },
-    {
-      id: '3',
-      type: 'output',
-      data: { label: 'Output Node' },
-      position: { x: 250, y: 250 },
-    },
-  ];
- 
-  const [node, setNode] = useState(initialNodes);
- 
-
-  const onNodesChange = useCallback(
-    (changes) => setNode((nds) => applyNodeChanges(changes, nds)),
-    [setNode]
-  );
- 
+    marginTop: "180px",
+  };
+  const rowStyle = {
+    display: "flex",
+    justifyContent: "center",
+  };
+  const boxStyle = {
+    padding: "10px",
+    border: "1px solid black",
+    marginTop: "50px",
+  };
 
   const location = useLocation();
   console.log(location);
@@ -66,11 +45,6 @@ function Simulation({ nodes, edges,   onConnect }) {
       sunoyster16.style.display = "block";
     }
   }, []);
-
-   
-
-  console.log();
-  console.log();
 
   // calcul et simulation
 
@@ -221,6 +195,23 @@ function Simulation({ nodes, edges,   onConnect }) {
 
   const serie = [pr_pvc_charge, pr_pvc_direct, pr_pvc_injected];
 
+  if (location.state.sunoyster16 === true) {
+    modelee = "Sunoyster 16";
+    type = "hybrid";
+  }
+  if (location.state.sunoyster16 === false) {
+    modelee = "Sunoyster 8";
+    type = "hybrid";
+  }
+
+  const print = (e) => {
+    window.print();
+  };
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   return (
     <div className="wrapper">
       <h2 id="titre">Calcul et simulation</h2>
@@ -242,27 +233,30 @@ function Simulation({ nodes, edges,   onConnect }) {
           </div>
         </div>
       </div>
+
       <div
         id="collapseOne"
         className="collapse show"
         aria-labelledby="headingOne"
-      
-
         data-parent="#accordion"
       >
-        <div className="card-body" id="bodys">
+        <div className="card-body" id="bodys" ref={componentRef}>
           <div className="SunoysterChoisis">
             <div className="row" id="image11" style={{ display: "none" }}>
               <img src={cs} alt="sunoyster"></img>
               <p id="titree">
-                <strong>Sunoster 16</strong>
+                <strong>Sunoster 8</strong>
               </p>
             </div>
 
-            <div className="row" id="image22" style={{ display: "none" }}>
+            <div
+              className="row"
+              id="image22"
+              style={{ display: "none", marginLeft: "350px" }}
+            >
               <img src={log} alt="sunoyster"></img>
               <p id="titree">
-                <strong>Sunoster 8</strong>
+                <strong>Sunoster 16</strong>
               </p>
             </div>
           </div>
@@ -354,14 +348,456 @@ function Simulation({ nodes, edges,   onConnect }) {
               </div>
             </div>
 
-         <div className="row"  >
- 
+            <div className="row" id="updateSize">
+              <h3 id="head">Generation electrique</h3>
+              <div style={{ height: "600px", margin: 0 }}>
+                <ArcherContainer strokeColor="red">
+                  <div id="confid">
+                    <ArcherElement
+                      id="root"
+                      relations={[
+                        {
+                          targetId: "element2",
+                          targetAnchor: "left",
+                          sourceAnchor: "right",
+                          style: { strokeColor: "blue", strokeWidth: 3 },
+                          label: (
+                            <div
+                              style={{
+                                marginTop: "-50px",
+                                fontFamily: "sans-serif",
+                                fontSize: "10px",
+                                border: "1px solid black",
+                                padding: "3px",
+                              }}
+                            >
+                              <strong>
+                                {Math.round(location.state.generationElec)} KWh
+                              </strong>
+                            </div>
+                          ),
+                        },
+                      ]}
+                    >
+                      <div style={boxStyle}>Generation PV</div>
+                    </ArcherElement>
 
+                    <ArcherElement
+                      id="element2"
+                      relations={[
+                        {
+                          targetId: "element3",
+                          targetAnchor: "left",
+                          sourceAnchor: "right",
+                          style: { strokeColor: "blue", strokeWidth: 3 },
+                          label: (
+                            <div
+                              style={{
+                                marginTop: "-80px",
+                                fontFamily: "sans-serif",
+                                fontSize: "10px",
+                                border: "1px solid black",
+                                padding: "3px",
+                              }}
+                            >
+                              <strong>{parseInt(pvDirect)} KWh</strong>
+                            </div>
+                          ),
+                        },
+                        {
+                          targetId: "element4",
+                          targetAnchor: "left",
+                          sourceAnchor: "right",
+                          style: { strokeColor: "blue", strokeWidth: 3 },
+                          label: (
+                            <div
+                              style={{
+                                marginTop: "50px",
+                                fontFamily: "sans-serif",
+                                fontSize: "10px",
+                                border: "1px solid black",
+                                padding: "3px",
+                              }}
+                            >
+                              <strong>{pvdecharge} KWh</strong>
+                            </div>
+                          ),
+                        },
+                        {
+                          targetId: "element",
+                          targetAnchor: "left",
+                          sourceAnchor: "right",
+                          style: { strokeColor: "blue", strokeWidth: 3 },
+                          label: (
+                            <div
+                              style={{
+                                marginTop: "120px",
+                                fontFamily: "sans-serif",
+                                fontSize: "10px",
+                                border: "1px solid black",
+                                padding: "3px",
+                              }}
+                            >
+                              <strong>{parseInt(pvReseau)} KWh</strong>
+                            </div>
+                          ),
+                        },
+                      ]}
+                    >
+                      <div style={boxStyle}>ONDULATEUR</div>
+                    </ArcherElement>
+                    <div>
+                      <ArcherElement
+                        id="element3"
+                        relations={[
+                          {
+                            targetId: "element6",
+                            targetAnchor: "top",
+                            sourceAnchor: "right",
+                            style: { strokeColor: "red", strokeWidth: 3 },
+                            label: (
+                              <div
+                                style={{
+                                  marginTop: "-50px",
+                                  fontFamily: "sans-serif",
+                                  fontSize: "10px",
+                                  border: "1px solid black",
+                                  padding: "3px",
+                                }}
+                              >
+                                <strong>{parseInt(pvDirect)} KWh</strong>
+                              </div>
+                            ),
+                          },
+                        ]}
+                      >
+                        <div style={boxStyle}>PV Direct</div>
+                      </ArcherElement>
+                      <ArcherElement
+                        id="element4"
+                        relations={[
+                          {
+                            targetId: "element6",
+                            targetAnchor: "left",
+                            sourceAnchor: "right",
+                            style: { strokeColor: "red", strokeWidth: 3 },
+                            label: (
+                              <div
+                                style={{
+                                  marginTop: "-50px",
+                                  fontFamily: "sans-serif",
+                                  fontSize: "10px",
+                                  border: "1px solid black",
+                                  padding: "3px",
+                                }}
+                              >
+                                <strong>{parseInt(pvc_charge)} KWh</strong>
+                              </div>
+                            ),
+                          },
+                        ]}
+                      >
+                        <div style={boxStyle}>PV Stockage</div>
+                      </ArcherElement>
+                      <ArcherElement
+                        id="element"
+                        relations={[
+                          {
+                            targetId: "element6",
+                            targetAnchor: "bottom",
+                            sourceAnchor: "right",
+                            style: { strokeColor: "red", strokeWidth: 3 },
+                            label: (
+                              <div style={{ marginTop: "-20px" }}>
+                                <strong>{parseInt(pvc_injection)} KWh</strong>
+                              </div>
+                            ),
+                          },
+                        ]}
+                      >
+                        <div style={boxStyle}>PV réseau</div>
+                      </ArcherElement>
+                    </div>
 
- 
-         </div>
+                    <div>
+                      {" "}
+                      <ArcherElement id="element6">
+                        <div id="resize">
+                          {" "}
+                          <div style={boxStyle}>Consommation electrique</div>
+                        </div>
+                      </ArcherElement>
+                    </div>
+                  </div>
+                  <h3 id="head">Generation thermique</h3>
+                  <div style={{ height: "600px", margin: 0 }}>
+                    <ArcherContainer strokeColor="red">
+                      <div id="confid">
+                        <ArcherElement
+                          id="root"
+                          relations={[
+                            {
+                              targetId: "element2",
+                              targetAnchor: "left",
+                              sourceAnchor: "right",
+                              style: { strokeColor: "blue", strokeWidth: 3 },
+                              label: (
+                                <div
+                                  style={{
+                                    marginTop: "-50px",
+                                    fontFamily: "sans-serif",
+                                    fontSize: "10px",
+                                    border: "1px solid black",
+                                    padding: "3px",
+                                  }}
+                                >
+                                  <strong>
+                                    {parseInt(location.state.generationTher)}{" "}
+                                    KWh
+                                  </strong>
+                                </div>
+                              ),
+                            },
+                          ]}
+                        >
+                          <div style={boxStyle}>Generation TH</div>
+                        </ArcherElement>
+
+                        <ArcherElement
+                          id="element2"
+                          relations={[
+                            {
+                              targetId: "element3",
+                              targetAnchor: "left",
+                              sourceAnchor: "right",
+                              style: { strokeColor: "blue", strokeWidth: 3 },
+                              label: (
+                                <div
+                                  style={{
+                                    marginTop: "-80px",
+                                    fontFamily: "sans-serif",
+                                    fontSize: "10px",
+                                    border: "1px solid black",
+                                    padding: "3px",
+                                  }}
+                                >
+                                  <strong>{parseInt(th_direct)} KWh</strong>
+                                </div>
+                              ),
+                            },
+                            {
+                              targetId: "element4",
+                              targetAnchor: "left",
+                              sourceAnchor: "right",
+                              style: { strokeColor: "blue", strokeWidth: 3 },
+                              label: (
+                                <div
+                                  style={{
+                                    marginTop: "50px",
+                                    fontFamily: "sans-serif",
+                                    fontSize: "10px",
+                                    border: "1px solid black",
+                                    padding: "3px",
+                                  }}
+                                >
+                                  <strong>{parseInt(th_decharge)} KWh</strong>
+                                </div>
+                              ),
+                            },
+                            {
+                              targetId: "element",
+                              targetAnchor: "left",
+                              sourceAnchor: "right",
+                              style: { strokeColor: "blue", strokeWidth: 3 },
+                              label: (
+                                <div
+                                  style={{
+                                    marginTop: "120px",
+                                    fontFamily: "sans-serif",
+                                    fontSize: "10px",
+                                    border: "1px solid black",
+                                    padding: "3px",
+                                  }}
+                                >
+                                  <strong>{parseInt(th_autre)} KWh</strong>
+                                </div>
+                              ),
+                            },
+                          ]}
+                        >
+                          <div style={boxStyle}>Echangeur</div>
+                        </ArcherElement>
+                        <div>
+                          <ArcherElement
+                            id="element3"
+                            relations={[
+                              {
+                                targetId: "element6",
+                                targetAnchor: "top",
+                                sourceAnchor: "right",
+                                style: { strokeColor: "red", strokeWidth: 3 },
+                                label: (
+                                  <div
+                                    style={{
+                                      marginTop: "-50px",
+                                      fontFamily: "sans-serif",
+                                      fontSize: "10px",
+                                      border: "1px solid black",
+                                      padding: "3px",
+                                    }}
+                                  >
+                                    <strong>{parseInt(th_direct)} KWh</strong>
+                                  </div>
+                                ),
+                              },
+                            ]}
+                          >
+                            <div style={boxStyle}>TH Direct</div>
+                          </ArcherElement>
+                          <ArcherElement
+                            id="element4"
+                            relations={[
+                              {
+                                targetId: "element6",
+                                targetAnchor: "left",
+                                sourceAnchor: "right",
+                                style: { strokeColor: "red", strokeWidth: 3 },
+                                label: (
+                                  <div
+                                    style={{
+                                      marginTop: "-50px",
+                                      fontFamily: "sans-serif",
+                                      fontSize: "10px",
+                                      border: "1px solid black",
+                                      padding: "3px",
+                                    }}
+                                  >
+                                    <strong>{parseInt(thc_charge)} KWh</strong>
+                                  </div>
+                                ),
+                              },
+                            ]}
+                          >
+                            <div style={boxStyle}>TH Stockage</div>
+                          </ArcherElement>
+                          <ArcherElement
+                            id="element"
+                            relations={[
+                              {
+                                targetId: "element6",
+                                targetAnchor: "bottom",
+                                sourceAnchor: "right",
+                                style: { strokeColor: "red", strokeWidth: 3 },
+                                label: (
+                                  <div
+                                    style={{
+                                      marginTop: "-20px",
+                                      fontFamily: "sans-serif",
+                                      fontSize: "10px",
+                                      border: "1px solid black",
+                                      padding: "3px",
+                                    }}
+                                  >
+                                    <strong>
+                                      {parseInt(thc_injection)} KWh
+                                    </strong>
+                                  </div>
+                                ),
+                              },
+                            ]}
+                          >
+                            <div style={boxStyle}>Th autre source </div>
+                          </ArcherElement>
+                        </div>
+
+                        <div>
+                          {" "}
+                          <ArcherElement id="element6">
+                            <div id="resize">
+                              {" "}
+                              <div style={boxStyle}>Consommation thermique</div>
+                            </div>
+                          </ArcherElement>
+                        </div>
+                      </div>
+                    </ArcherContainer>
+                  </div>
+                </ArcherContainer>
+              </div>
+            </div>
+            <div className="ba">
+              <div className="row b" id="resultat">
+                <div className="col-sm-2">
+                  <div>
+                    {" "}
+                    <p>
+                      <strong> Modèle : </strong>{" "}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="col-sm-2">{modelee}</div>
+                <div className="col-sm-2">
+                  <div>
+                    {" "}
+                    <p>
+                      <strong> Type : </strong>{" "}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="col-sm-2">{type}</div>
+                <div className="col-sm-2">
+                  <div>
+                    {" "}
+                    <p>
+                      <strong> Température du fluide :</strong>{" "}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="col-sm-2">{location.state.tempFluid} C°</div>
+
+                <div className="col-sm-2">
+                  <div>
+                    {" "}
+                    <p>
+                      <strong>Nombre d'unités: </strong>{" "}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="col-sm-2">
+                  {" "}
+                  {location.state.nbrunite} kit (s)
+                </div>
+                <div className="col-sm-2">
+                  <div>
+                    {" "}
+                    <p>
+                      <strong> Espace occupé : </strong>{" "}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="col-sm-2"> {location.state.espace} m²</div>
+
+                <div>
+                  {" "}
+                  <p>
+                    <strong> </strong>{" "}
+                  </p>
+                </div>
+                <div className="row" id="imp">
+          <button className="btn btn-primary" onClick={handlePrint}>
+            Imprimer En Format PDF
+          </button>
+        </div>
+              </div>
+            </div>
           </div>
         </div>
+     
       </div>
     </div>
   );
