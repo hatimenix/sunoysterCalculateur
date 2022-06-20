@@ -107,7 +107,7 @@ function Simulation() {
     (thc_injection * 100) / location.state.generationTher
   );
 
-  //configuration de react-apexchart
+  //configuration de chartjs
   const opti = {
     series: [
       Math.round(prthc_direct),
@@ -372,7 +372,7 @@ function Simulation() {
                               }}
                             >
                               <strong>
-                                {Math.round(location.state.generationElec)} KWh
+                                {location.state.generationElec} KWh
                               </strong>
                             </div>
                           ),
@@ -413,7 +413,7 @@ function Simulation() {
                             <div
                               style={{
                                 marginTop: "-50px",
-                                marginLeft : "25px",
+                                marginLeft: "30px",
                                 fontFamily: "sans-serif",
                                 fontSize: "10px",
                                 border: "1px solid black",
@@ -509,11 +509,7 @@ function Simulation() {
                             sourceAnchor: "right",
                             style: { strokeColor: "red", strokeWidth: 3 },
                             label: (
-                              <div style={{ marginTop: "-20px",
-                              fontFamily: "sans-serif",
-                              fontSize: "10px",
-                              border: "1px solid black",
-                              padding: "3px", }}>
+                              <div style={{ marginTop: "-20px" }}>
                                 <strong>{parseInt(pvc_injection)} KWh</strong>
                               </div>
                             ),
@@ -599,7 +595,7 @@ function Simulation() {
                                 <div
                                   style={{
                                     marginTop: "-50px",
-                                    marginLeft : "25px",
+                                    marginLeft: "30px",
                                     fontFamily: "sans-serif",
                                     fontSize: "10px",
                                     border: "1px solid black",
@@ -795,15 +791,14 @@ function Simulation() {
                   </p>
                 </div>
                 <div className="row" id="imp">
-          <button className="btn btn-primary" onClick={handlePrint}>
-            Imprimer En Format PDF
-          </button>
-        </div>
+                  <button className="btn btn-primary" onClick={handlePrint}>
+                    Imprimer En Format PDF
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-     
       </div>
     </div>
   );
