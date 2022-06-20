@@ -22,7 +22,6 @@
     "dotenv": "^16.0.0",
     "gojs": "^2.2.11",
     "gojs-react": "^1.1.1",
-    "google-maps-react": "^2.0.6",
     "googleapis": "^100.0.0",
     "install": "^0.13.0",
     "jquery": "^3.6.0",
