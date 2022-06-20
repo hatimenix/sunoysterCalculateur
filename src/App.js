@@ -1,7 +1,7 @@
 import "./App.css";
 
 import Title from "./components/Title";
-import { createSlice } from "@reduxjs/toolkit";
+ 
 import React, { useRef, useEffect, useState, createContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import MyMapComponent from "./MyMapComponent.js";
@@ -12,12 +12,7 @@ import Select from "react-select";
 import Tooltip from "@mui/material/Tooltip";
 import {
   Chart as ChartJS,
-  LinearScale,
-  CategoryScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  Legend,
+ 
   registerables as registerablesJS,
 } from "chart.js";
 
@@ -40,38 +35,22 @@ let generationElAnnuel = [];
  
 const animatedComponents = makeAnimated();
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
-
+//prix des gazs
 let puMazout = 13;
 let puFioul = 4;
 let puPropane = 12;
 let ceFioul = 10;
 let cePropane = 13;
 let ceMazout = 10;
-
-function loadAsyncScript(src) {
-  return new Promise((resolve) => {
-    const script = document.createElement("script");
-    Object.assign(script, {
-      type: "text/javascript",
-      async: true,
-      src,
-    });
-    script.addEventListener("load", () => resolve(script));
-    document.head.appendChild(script);
-  });
-}
-
+ 
 export const ghir = createContext();
 
 function App(props) {
+
+
   let navigate = useNavigate();
-  const routeChange = () => {
-    let path = `/simulation`;
-    navigate(path);
-  };
-  const [state, setState] = useState({
-    persons: [],
-  });
+  
+   
   const [ghi, setGhi] = useState();
   const [nbrunite, setNbrunite] = useState(0);
   const [esp, setEsp] = useState(0);
@@ -112,7 +91,7 @@ function App(props) {
     155,
     197,
   ]);
-  console.log(nbrunite);
+ 
 
   const [inputFac, setInputFac] = useState("");
   const [energieElectrique, setEnergieelecrtique] = useState(0);
@@ -142,18 +121,22 @@ function App(props) {
       al.style.display = "block";
     }
   };
-
+//statue de chargement de googlemap
   const render = (Status) => {
     return <h1>{Status}</h1>;
   };
+
+
   const validatee = (e) => {
+
+    if(InputFacture==='' || InputFacture.isNaN() ){
+     
+    }
     console.log(e);
   };
-  function updateTextInput(val) {
-    document.getElementById("textInput").value = val;
-  }
+  
 
-  const Add = addrtype.map((Add) => Add);
+  //gestion du select de gaz
   const handleAddrTypeChange = (e) => {
     setConstType(e.target.value);
 
@@ -234,7 +217,7 @@ function App(props) {
       setConsTherm((e * ceFioul) / puFioul);
     }
   };
-  const geocodeJson = "https://maps.googleapis.com/maps/api/js";
+ 
 
   useEffect(() => {
     if (histgramme != null) {
@@ -276,6 +259,9 @@ function App(props) {
       },
     });
   });
+
+
+  //graphique de generation d'energie mensuelle
   useEffect(() => {
     if (myChar != null) {
       myChar.destroy();
@@ -328,6 +314,8 @@ function App(props) {
     setInputFac(e * 0.89);
   };
 
+  
+
   const options = [
     { value: "2th", label: "2 Tubes hybrides" },
     { value: "2tt", label: "2 Tubes thermiques" },
@@ -335,8 +323,8 @@ function App(props) {
     { value: "PVP", label: "PV plus" },
   ];
 
-  const MyComponent = () => <Select options={options} />;
-
+ 
+//tableau des valeurs acquisent depuis MyMapComponent.js
   const sGHI = {
     ghi: ghi,
     dni: dni,
@@ -348,14 +336,15 @@ function App(props) {
     setGhi: setGhi,
   };
 
-  const handleChange = (event, newValue) => {
-    setTempFluid(newValue);
-  };
-
+ 
+//image de modele à choisir 
   let chekb = document.getElementById("sunoysterchoisis16");
   let chek = document.getElementById("sunoysterchoisis8");
   let che = document.getElementById("ck1c");
   let ch = document.getElementById("ck1d");
+
+
+
   const handlChan = (e) => {
     if (e.target.checked) {
       ch.checked = false;
@@ -534,7 +523,7 @@ function App(props) {
       setEnergiethermique(tubethermique * nbrunite);
     }
   };
-
+//tableau des valeurs passé au composant Simulation.js à travers Link
   const store = {
     consoThermique: consTherm,
     generationElec: energieElectrique,
@@ -549,7 +538,7 @@ function App(props) {
     espace : esp,
   };
 
-  console.log(generationElAnnuel);
+ //gestion du checkbox pvplus facultatif
   const handlePvPlus = (e) => {
     if (pvPlus.checked && typ === "2th" && ch.checked) {
       const outputEnergieElectrique =
@@ -606,7 +595,7 @@ function App(props) {
     }
   };
 
-  console.log(energieElectrique);
+  
 
   const InputFacture = document.getElementById('factureElectrique')
 

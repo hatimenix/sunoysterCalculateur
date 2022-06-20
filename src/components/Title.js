@@ -1,8 +1,7 @@
 import sos from "../SOS.jpg";
 import ss from "../ALBARRAY_Consulting.jpg";
 import bb from "../dynamic_so16.gif";
-
-//header de l'application
+ 
 function Title() {
   return (
     <div>

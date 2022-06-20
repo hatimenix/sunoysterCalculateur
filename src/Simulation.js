@@ -107,7 +107,7 @@ function Simulation() {
     (thc_injection * 100) / location.state.generationTher
   );
 
-  //configuration de chartjs
+  //configuration de react-apexchart
   const opti = {
     series: [
       Math.round(prthc_direct),
@@ -214,7 +214,7 @@ function Simulation() {
 
   return (
     <div className="wrapper">
-      <h2 id="titre">Calcul et simulation</h2>
+      <h2 id="Ctitre">Calcul et simulation</h2>
 
       <div id="accordion" className="accordio">
         <div class="card">
@@ -412,7 +412,8 @@ function Simulation() {
                           label: (
                             <div
                               style={{
-                                marginTop: "50px",
+                                marginTop: "-50px",
+                                marginLeft : "25px",
                                 fontFamily: "sans-serif",
                                 fontSize: "10px",
                                 border: "1px solid black",
@@ -508,7 +509,11 @@ function Simulation() {
                             sourceAnchor: "right",
                             style: { strokeColor: "red", strokeWidth: 3 },
                             label: (
-                              <div style={{ marginTop: "-20px" }}>
+                              <div style={{ marginTop: "-20px",
+                              fontFamily: "sans-serif",
+                              fontSize: "10px",
+                              border: "1px solid black",
+                              padding: "3px", }}>
                                 <strong>{parseInt(pvc_injection)} KWh</strong>
                               </div>
                             ),
@@ -593,7 +598,8 @@ function Simulation() {
                               label: (
                                 <div
                                   style={{
-                                    marginTop: "50px",
+                                    marginTop: "-50px",
+                                    marginLeft : "25px",
                                     fontFamily: "sans-serif",
                                     fontSize: "10px",
                                     border: "1px solid black",

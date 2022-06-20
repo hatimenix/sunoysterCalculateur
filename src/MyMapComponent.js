@@ -1,4 +1,4 @@
-import { React, useContext, useEffect, useRef, useState } from "react";
+import { React, useContext, useEffect, useRef, useState ,Link} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo, faInfo } from "@fortawesome/free-solid-svg-icons";
 import context from "./context";
@@ -34,9 +34,7 @@ let arrayGhi = [128, 149, 191, 218, 232, 232, 226, 214, 173, 153, 113, 116],
   arrayDni = [222, 212, 229, 246, 225, 226, 192, 202, 170, 183, 155, 197];
 
 let map;
-let raddatabase = "PVGIS-SARAH2";
-let outputformat = "json";
-let marker;
+ 
 let geocoder;
 let geocodeString;
 let responseDiv;
@@ -44,7 +42,7 @@ let resp;
 const apiKey = "AIzaSyA-0mArLoA2qAMQxfx1GldwodYmTMaKSkQ";
 const gecoderApi = "https://maps.googleapis.com/maps/api/geocode/json";
 
-function MyMapComponent(props) {
+function MyMapComponent() {
   const [zoom, setZoom] = useState(8);
   const [lat, setLat] = useState(30.427755);
   const [inp, setInp] = useState("");
