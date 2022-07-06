@@ -632,7 +632,7 @@ function App(props) {
                 aria-controls="panelsStayOpen-collapseOne"
                 id="tx"
               >
-                Localisation Geographique
+                Localisation Géographique
               </button>
             </h2>
             <div
