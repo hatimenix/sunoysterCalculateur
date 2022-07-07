@@ -151,6 +151,15 @@ function App(props) {
     if(InputFacture===' ')
     console.log(e);
   };
+
+ 
+
+  function frm(v) {
+    const numberFormatter = Intl.NumberFormat('en-US');
+    return numberFormatter.format(v);
+  }
+
+
   function updateTextInput(val) {
     document.getElementById("textInput").value = val;
   }
@@ -696,7 +705,7 @@ function App(props) {
                       <input
                         className="form-control"
                         placeholder="saisissez le montant annuelle en DH TTC"
-                        value={Math.round(inputFac / 0.89)}
+                        value={  frm(Math.round(inputFac / 0.89))}
                         onChange={(e) => maybeInputFac(e.target.value)}
                         required
                       />
@@ -739,8 +748,8 @@ function App(props) {
                     <div className="col-sm">
                       <input
                         className="form-control"
-                        value={consTherm}
-                        onChange={(e) => maybeConsTherm(e.target.value)}
+                        value={frm(consTherm)}
+                        onChange={(e) =>  maybeConsTherm(e.target.value)}
                         required
                       />
                     </div>
